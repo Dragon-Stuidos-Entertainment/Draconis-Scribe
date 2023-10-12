@@ -1,5 +1,6 @@
 import os
 import discord
+from decouple import config
 from discord.ext import commands
 import datetime
 
@@ -41,6 +42,6 @@ async def on_message(message):
     await bot.process_commands(message)
 
 # Read the bot token from the environment variable
-BOT_TOKEN = os.getenv('TOKEN')
+BOT_TOKEN = config ('TOKEN')
 
 bot.run(BOT_TOKEN)
