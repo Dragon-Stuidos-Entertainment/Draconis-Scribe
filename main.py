@@ -42,6 +42,6 @@ async def on_message(message):
     await bot.process_commands(message)
 
 # Read the bot token from the environment variable
-BOT_TOKEN = config ('TOKEN')
+BOT_TOKEN =TOKEN
 
 bot.run(BOT_TOKEN)
