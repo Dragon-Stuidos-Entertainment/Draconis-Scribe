@@ -1,7 +1,13 @@
-@bot.command()
-async def ping(ctx):
-    before = datetime.datetime.now()
-    message = await ctx.send("Pinging...")
-    after = datetime.datetime.now()
-    latency = (after - before).total_seconds() * 1000
-    await message.edit(content=f"Pong! Latency is {latency:.2f}ms")
+import discord
+from discord.ext import commands
+
+class Ping(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+    @commands.command()
+    async def ping(self, ctx):
+        await ctx.send("Pong!")
+
+def setup(bot):
+    bot.add_cog(Ping(bot))
