@@ -38,18 +38,6 @@ async def on_connect():
     if channel:
         await channel.send("Bot is back online and ready for action!")
 
-@bot.command()
-async def whoareyou(ctx):
-    await ctx.send("I am Blackbox, the Office of Naval Intelligence AI. How may I help you?")
-
-@bot.event
-async def on_message(message):
-    if message.content.lower() == "who are you":
-        response = "I am Blackbox, the Office of Naval Intelligence AI. How may I help you?"
-        await message.channel.send(response)
-
-    await bot.process_commands(message)
-
 # Read the bot token from the environment variable
 BOT_TOKEN = os.getenv('DISCORD_BOT_TOKEN')
 
