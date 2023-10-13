@@ -11,6 +11,7 @@ intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
 YOUR_CHANNEL_ID = 1162234055253835968
+
 initial_extensions = ['cogs.ping', 'cogs.clear']
 
 @bot.event
