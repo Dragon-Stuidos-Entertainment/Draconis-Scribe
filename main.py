@@ -18,7 +18,7 @@ async def on_ready():
     await bot.change_presence(status=discord.Status.online, activity=discord.Game("Online"))
 
 # Load extensions (cogs)
-if __name__ == '__main__':
+if __name__ == '__cogs__':
     for extension in initial_extensions:
         asyncio.run(bot.load_extension(extension))
 
