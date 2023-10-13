@@ -15,7 +15,7 @@ async def on_ready():
     print(f'Logged in as {bot.user.name} ({bot.user.id})')
 
 @bot.command()
-async def who_are_you(ctx):
+async def whoareyou(ctx):
     await ctx.send("I am Blackbox, the Office of Naval Intelligence AI. How may I help you?")
 
 @bot.command()
