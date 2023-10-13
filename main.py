@@ -2,7 +2,7 @@ import os
 import discord
 from discord.ext import commands
 import datetime
-import asyncio  # Import the asyncio module
+import asyncio
 
 intents = discord.Intents.default()
 intents.typing = False
@@ -13,9 +13,21 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 @bot.event
 async def on_ready():
     print(f'Logged in as {bot.user.name} ({bot.user.id})')
+    await bot.change_presence(status=discord.Status.online, activity=discord.Game("Online"))
 
-    # Set the initial presence
-    await bot.change_presence(status=discord.Status.online, activity=discord.Game("Under Maintenance"))
+@bot.event
+async def on_disconnect():
+    await bot.change_presence(status=discord.Status.dnd, activity=discord.Game("Under Maintenance"))
+    channel = bot.get_channel(1162234055253835968)  # Replace with the desired channel ID
+    if channel:
+        await channel.send("Bot is undergoing maintenance and is now offline.")
+
+@bot.event
+async def on_connect():
+    await bot.change_presence(status=discord.Status.online, activity=discord.Game("Online"))
+    channel = bot.get_channel(YOUR_CHANNEL_ID)  # Replace with the desired channel ID
+    if channel:
+        await channel.send("Bot is back online and ready for action!")
 
 @bot.command()
 async def whoareyou(ctx):
