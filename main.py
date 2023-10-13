@@ -2,6 +2,7 @@ import os
 import discord
 from discord.ext import commands
 import datetime
+import asyncio  # Import the asyncio module
 
 intents = discord.Intents.default()
 intents.typing = False
@@ -13,9 +14,8 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 async def on_ready():
     print(f'Logged in as {bot.user.name} ({bot.user.id})')
 
-@bot.event
-async def on_disconnect():
-    await bot.change_presence(status=discord.Status.dnd, activity=discord.Game("Under Maintenance"))
+    # Set the initial presence
+    await bot.change_presence(status=discord.Status.online, activity=discord.Game("Under Maintenance"))
 
 @bot.command()
 async def whoareyou(ctx):
