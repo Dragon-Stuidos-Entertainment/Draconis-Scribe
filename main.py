@@ -2,7 +2,6 @@ import os
 import discord
 from discord.ext import commands
 import datetime
-import key
 
 intents = discord.Intents.default()
 intents.typing = False
@@ -42,6 +41,6 @@ async def on_message(message):
     await bot.process_commands(message)
 
 # Read the bot token from the environment variable
-BOT_TOKEN =key.DISCORD_BOT_TOKEN
+BOT_TOKEN =DISCORD_BOT_TOKEN
 
 bot.run(BOT_TOKEN)
