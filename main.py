@@ -29,6 +29,14 @@ async def ping(ctx):
     latency = (after - before).total_seconds() * 1000
     await message.edit(content=f"Pong! Latency is {latency:.2f}ms")
 
+@bot.command()
+async def clear(ctx, amount=5):
+    # Check if the user has the necessary permissions to manage messages
+    if ctx.message.author.guild_permissions.manage_messages:
+        await ctx.channel.purge(limit=amount + 1)
+    else:
+        await ctx.send("You don't have permission to manage messages.")
+
 @bot.event
 async def on_message(message):
     if message.content.lower() == "who are you":
