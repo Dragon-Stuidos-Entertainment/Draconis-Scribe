@@ -2,11 +2,12 @@ import os
 import discord
 from discord.ext import commands
 import datetime
+import key  # Import the key module
 
 intents = discord.Intents.default()
 intents.typing = False
 intents.presences = False
-intents.message_content = True  # Enable message content intent
+intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
 @bot.event
@@ -23,13 +24,10 @@ async def hello(ctx):
 
 @bot.command()
 async def ping(ctx):
-    # Calculate the response time (latency) of the bot
     before = datetime.datetime.now()
     message = await ctx.send("Pinging...")
     after = datetime.datetime.now()
     latency = (after - before).total_seconds() * 1000
-
-    # Edit the message to show the latency
     await message.edit(content=f"Pong! Latency is {latency:.2f}ms")
 
 @bot.event
@@ -40,7 +38,10 @@ async def on_message(message):
 
     await bot.process_commands(message)
 
-# Read the bot token from the environment variable
-BOT_TOKEN =DISCORD_BOT_TOKEN
+# Read the bot token from the imported variable in key.py
+BOT_TOKEN = key.DISCORD_BOT_TOKEN
+
+if BOT_TOKEN is None:
+    raise ValueError("DISCORD_BOT_TOKEN is not set in key.py.")
 
 bot.run(BOT_TOKEN)
