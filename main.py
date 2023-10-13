@@ -13,6 +13,10 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 async def on_ready():
     print(f'Logged in as {bot.user.name} ({bot.user.id})')
 
+@bot.event
+async def on_disconnect():
+    await bot.change_presence(status=discord.Status.dnd, activity=discord.Game("Under Maintenance"))
+
 @bot.command()
 async def whoareyou(ctx):
     await ctx.send("I am Blackbox, the Office of Naval Intelligence AI. How may I help you?")
@@ -31,7 +35,6 @@ async def ping(ctx):
 
 @bot.command()
 async def clear(ctx, amount=5):
-    # Check if the user has the necessary permissions to manage messages
     if ctx.message.author.guild_permissions.manage_messages:
         await ctx.channel.purge(limit=amount + 1)
     else:
