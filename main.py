@@ -2,6 +2,7 @@ import os
 import discord
 from discord.ext import commands
 import datetime
+import key
 
 intents = discord.Intents.default()
 intents.typing = False
