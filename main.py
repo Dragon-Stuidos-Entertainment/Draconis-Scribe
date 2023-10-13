@@ -10,6 +10,8 @@ intents.presences = False
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
+YOUR_CHANNEL_ID = 1162234055253835968
+
 @bot.event
 async def on_ready():
     print(f'Logged in as {bot.user.name} ({bot.user.id})')
