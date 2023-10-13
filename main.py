@@ -11,11 +11,17 @@ intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
 YOUR_CHANNEL_ID = 1162234055253835968
+initial_extensions = ['cogs.ping', 'cogs.clear']
 
 @bot.event
 async def on_ready():
     print(f'Logged in as {bot.user.name} ({bot.user.id})')
     await bot.change_presence(status=discord.Status.online, activity=discord.Game("Online"))
+
+# Load extensions (cogs)
+if __name__ == '__main__':
+    for extension in initial_extensions:
+        bot.load_extension(extension)
 
 @bot.event
 async def on_disconnect():
@@ -34,25 +40,6 @@ async def on_connect():
 @bot.command()
 async def whoareyou(ctx):
     await ctx.send("I am Blackbox, the Office of Naval Intelligence AI. How may I help you?")
-
-@bot.command()
-async def hello(ctx):
-    await ctx.send("Hello, I'm your Discord bot!")
-
-@bot.command()
-async def ping(ctx):
-    before = datetime.datetime.now()
-    message = await ctx.send("Pinging...")
-    after = datetime.datetime.now()
-    latency = (after - before).total_seconds() * 1000
-    await message.edit(content=f"Pong! Latency is {latency:.2f}ms")
-
-@bot.command()
-async def clear(ctx, amount=5):
-    if ctx.message.author.guild_permissions.manage_messages:
-        await ctx.channel.purge(limit=amount + 1)
-    else:
-        await ctx.send("You don't have permission to manage messages.")
 
 @bot.event
 async def on_message(message):
