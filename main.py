@@ -2,7 +2,6 @@ import os
 import discord
 from discord.ext import commands
 import datetime
-import key  # Import the key module
 
 intents = discord.Intents.default()
 intents.typing = False
@@ -38,10 +37,10 @@ async def on_message(message):
 
     await bot.process_commands(message)
 
-# Read the bot token from the imported variable in key.py
-BOT_TOKEN = key.DISCORD_BOT_TOKEN
+# Read the bot token from the environment variable
+BOT_TOKEN = os.getenv('DISCORD_BOT_TOKEN')
 
 if BOT_TOKEN is None:
-    raise ValueError("DISCORD_BOT_TOKEN is not set in key.py.")
+    raise ValueError("DISCORD_BOT_TOKEN environment variable is not set.")
 
 bot.run(BOT_TOKEN)
