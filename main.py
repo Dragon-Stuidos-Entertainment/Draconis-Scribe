@@ -10,7 +10,6 @@ intents.presences = False
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
-YOUR_CHANNEL_ID = 1162234055253835968
 
 initial_extensions = ['cogs.ping', 'cogs.clear']
 
@@ -34,7 +33,7 @@ async def on_disconnect():
 @bot.event
 async def on_connect():
     await bot.change_presence(status=discord.Status.online, activity=discord.Game("Online"))
-    channel = bot.get_channel(YOUR_CHANNEL_ID)  # Replace with the desired channel ID
+    channel = bot.get_channel(1162234055253835968)  # Replace with the desired channel ID
     if channel:
         await channel.send("Bot is back online and ready for action!")
 
