@@ -105,4 +105,9 @@ class Enlistment(commands.Cog):
         await dm_channel.send(f"Your application has been approved by {approver} with the following reason: {application['reason']}")
 
     async def send_denial_notification(self, application, denier):
-        #
+        # Send a denial notification to the applicant
+        dm_channel = await self.bot.get_user(application["message"].author.id).create_dm()
+        await dm_channel.send(f"Your application has been denied by {denier} with the following reason: {application['reason']}")
+
+def setup(bot):
+    bot.add_cog(Enlistment(bot))
