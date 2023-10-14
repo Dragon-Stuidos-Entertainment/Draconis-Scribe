@@ -31,7 +31,7 @@ async def on_ready():
 @bot.event
 async def on_disconnect():
     # Replace this with your channel ID
-    your_channel_id = 1162830886723657869
+    your_channel_id = 1118782771821826100
     
     channel = bot.get_channel(your_channel_id)
     if channel:
