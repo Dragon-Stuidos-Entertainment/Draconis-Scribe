@@ -56,7 +56,7 @@ class Enlistment(commands.Cog):
             embed = discord.Embed(title="Enlistment Application", color=discord.Color.blue())
             for question, answer in zip(application["questions"], application["answers"]):
                 embed.add_field(name=question, value=answer, inline=False)
-            embed.set_footer(text=f"Submitted by {ctx.author.display_name}")
+            embed.set_footer(text=f"Submitted by {ctx.author.id}")
 
             # Send the application as an embed
             message = await enlistment_channel.send(embed=embed)
