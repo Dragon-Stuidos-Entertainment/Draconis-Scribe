@@ -47,7 +47,7 @@ class Poll(commands.Cog):
     @commands.command(name="finish_poll")
     async def finish_poll(self, ctx: commands.Context):
         # Finish the active poll and display results
-        if ctx author.id not in self.active_polls:
+        if ctx.author.id not in self.active_polls:
             await ctx.send("There is no active poll to finish.")
             return
 
