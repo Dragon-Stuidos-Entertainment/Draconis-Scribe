@@ -46,7 +46,9 @@ class Poll(commands.Cog):
 
         poll_message.set_footer(text="Poll created by " + ctx.author.display_name)
 
-        poll_message = await ctx.send(embed=poll_message)
+        poll_message = await ctx.send(embed=poll_message)  # Get the message object
+
+        # Add reactions to the message object
         await poll_message.add_reaction("✅")
         await poll_message.add_reaction("❌")
 
