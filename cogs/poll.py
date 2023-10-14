@@ -20,29 +20,15 @@ class Poll(commands.Cog):
         poll = {"question": question, "options": list(options), "votes": {}}
         self.active_polls[ctx.author.id] = poll
 
-        # Send the poll to the channel
-        poll_message = f"**{question}**\n"
+        # Create an embedded poll message
+        poll_embed = discord.Embed(title=f"**{question}**", description="Vote by reacting with ✅ or ❌")
+
         for index, option in enumerate(options):
-            poll_message += f"{index + 1}. {option}\n"
+            poll_embed.add_field(name=f"Option {index + 1}", value=option, inline=False)
 
-        poll_message += "\nVote using the command: !vote <option_number>"
-        await ctx.send(poll_message)
-
-    @commands.command(name="vote")
-    async def vote(self, ctx: commands.Context, option_number: int):
-        # Allow users to vote in the active poll
-        if ctx.author.id not in self.active_polls:
-            await ctx.send("There is no active poll to vote in.")
-            return
-
-        poll = self.active_polls[ctx.author.id]
-        if option_number < 1 or option_number > len(poll["options"]):
-            await ctx.send("Invalid option number. Please vote for a valid option.")
-            return
-
-        user_id = ctx.author.id
-        poll["votes"][user_id] = option_number
-        await ctx.send(f"Your vote for option {option_number} has been recorded.")
+        poll_message = await ctx.send(embed=poll_embed)
+        await poll_message.add_reaction("✅")  # Add ✅ reaction
+        await poll_message.add_reaction("❌")  # Add ❌ reaction
 
     @commands.command(name="finish_poll")
     async def finish_poll(self, ctx: commands.Context):
@@ -54,8 +40,17 @@ class Poll(commands.Cog):
         poll = self.active_polls.pop(ctx.author.id)
         results = {option: 0 for option in poll["options"]}
 
-        for vote in poll["votes"].values():
-            results[poll["options"][vote - 1]] += 1
+        # Fetch the poll message for reactions
+        async for message in ctx.channel.history(limit=1):
+            if message.id == poll_message.id:
+                poll_message = message
+                break
+
+        for reaction in poll_message.reactions:
+            if reaction.emoji == "✅":
+                results[poll["options"][0]] = reaction.count
+            elif reaction.emoji == "❌":
+                results[poll["options"][1]] = reaction.count
 
         result_message = "Poll Results:\n"
         for option, count in results.items():
