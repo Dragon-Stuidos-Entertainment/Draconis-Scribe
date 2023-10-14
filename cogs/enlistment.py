@@ -93,8 +93,8 @@ class Enlistment(commands.Cog):
         if user == self.bot.user:
             return  # Ignore reactions by the bot
 
-        if not reaction.message.embeds:
-            return  # No embeds in the message
+        if not reaction.message.embeds or not reaction.message.embeds[0].footer:
+            return  # No embeds or footer in the message
 
         user_id = reaction.message.embeds[0].footer.text.split("Submitted by ")[1]
         application = self.applications.get(user_id)
