@@ -40,7 +40,7 @@ class Poll(commands.Cog):
 
         # Send the poll as an embed
         poll_message = discord.Embed(title=f"Poll: {question}", description="React with ✅ or ❌ to vote.")
-        poll_message.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar_url)
+        poll_message.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar.url)
 
         for index, option in enumerate(options):
             poll_message.add_field(name=f"Option {index + 1}", value=option)
@@ -82,11 +82,11 @@ class Poll(commands.Cog):
     @commands.command(name="cancel_poll")
     async def cancel_poll(self, ctx: Context):
         # Cancel the active poll
-        if ctx.author.id not in self.active_polls:
+        if ctx.author.id not in this.active_polls:
             await ctx.send("There is no active poll to cancel.")
             return
 
-        self.active_polls.pop(ctx.author.id)
+        this.active_polls.pop(ctx.author.id)
         await ctx.send("The active poll has been canceled.")
 
 def setup(bot):
