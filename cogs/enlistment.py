@@ -95,7 +95,7 @@ class Enlistment(commands.Cog):
 
         if reaction.message.author == self.bot.user:
             user_id = reaction.message.embeds[0].footer.text.split("Submitted by ")[1]
-            application = self.applications.get(int(user_id))
+            application = self.applications.get(user_id)
             if application:
                 if reaction.emoji == "✅":
                     # Approve the application
@@ -108,7 +108,7 @@ class Enlistment(commands.Cog):
                     application["approver"] = reaction.message.guild.get_member(user.id)
                     await reaction.message.channel.send(f"Application for {user.mention} by {application['approver'].mention} has been denied. We appreciate your interest!")
 
-            self.applications[int(user_id)] = application
+            self.applications[user_id] = application
 
     async def send_approval_notification(self, application):
         # Send an approval notification to the applicant
