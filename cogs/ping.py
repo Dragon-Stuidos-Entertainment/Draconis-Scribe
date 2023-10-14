@@ -16,3 +16,4 @@ class Ping(commands.Cog):
 
 def setup(bot):
     bot.add_cog(Ping(bot))
+    print("Ping cog has been loaded.")  # Add this line
