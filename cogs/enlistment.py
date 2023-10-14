@@ -22,7 +22,7 @@ class Enlistment(commands.Cog):
         application = {"questions": [], "answers": [], "status": None, "reason": None, "approver": None}
 
         # List of enlistment questions
-        enlistment_questions = [
+        enlistment questions = [
             "What is your full name?",
             "What is your age?",
             "Gamertag?",
@@ -39,7 +39,7 @@ class Enlistment(commands.Cog):
 
         # Send questions to the user in DMs
         dm_channel = await ctx.author.create_dm()
-        for question in enlistment_questions:
+        for question in enlistment questions:
             await dm_channel.send(question)
             try:
                 response = await self.bot.wait_for('message', timeout=300, check=lambda m: m.author == ctx.author and m.channel == dm_channel)
@@ -75,12 +75,12 @@ class Enlistment(commands.Cog):
                 if reaction.emoji == "✅":
                     # Approve the application
                     application["status"] = "Approved"
-                    application["approver"] = reaction.message.guild.get_member(reaction.user.id)
+                    application["approver"] = reaction.message.guild.get_member(user.id)
                     await dm_channel.send(f"Your application has been approved by {application['approver'].mention}. Congratulations!")
                 elif reaction.emoji == "❌":
                     # Deny the application
                     application["status"] = "Denied"
-                    application["approver"] = reaction.message.guild.get_member(reaction.user.id)
+                    application["approver"] = reaction.message.guild.get_member(user.id)
                     await dm_channel.send(f"Your application has been denied by {application['approver'].mention}. We appreciate your interest!")
 
             except asyncio.TimeoutError:
