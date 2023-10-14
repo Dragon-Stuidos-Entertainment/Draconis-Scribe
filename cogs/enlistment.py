@@ -22,7 +22,7 @@ class Enlistment(commands.Cog):
         application = {"questions": [], "answers": [], "status": None, "reason": None, "approver": None}
 
         # List of enlistment questions
-        enlistment questions = [
+        enlistment_questions = [
             "What is your full name?",
             "What is your age?",
             "Gamertag?",
@@ -39,7 +39,7 @@ class Enlistment(commands.Cog):
 
         # Send questions to the user in DMs
         dm_channel = await ctx.author.create_dm()
-        for question in enlistment questions:
+        for question in enlistment_questions:
             await dm_channel.send(question)
             try:
                 response = await self.bot.wait_for('message', timeout=300, check=lambda m: m.author == ctx.author and m.channel == dm_channel)
