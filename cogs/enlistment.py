@@ -42,7 +42,7 @@ class Enlistment(commands.Cog):
             await ctx.send(f"Question {i + 1}: Your answer - {answer}")
 
         # Send the answers to a specific channel
-        enlistment_channel = self.bot.get_channel(YOUR_ENLISTMENT_CHANNEL_ID)  # Replace with the actual channel ID
+        enlistment_channel = self.bot.get_channel(1162833977132982302)  # Replace with the actual channel ID
         if enlistment_channel:
             # Format answers as a message
             answers_message = "\n".join([f"Question {i + 1}: {question}\nAnswer: {answer}" for i, (question, answer) in enumerate(zip(self.enlistment_questions, answers))])
