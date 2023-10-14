@@ -1,52 +1,68 @@
 import discord
 from discord.ext import commands
 
+YOUR_ENLISTMENT_ID =1162833977132982302
+
 class Enlistment(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+        # Dictionary to store enlistment applications
+        self.applications = {}
+
+    @commands.command(name="enlist")
+    async def enlist(self, ctx):
+        # Check if the user has an existing application
+        if ctx.author.id in self.applications:
+            await ctx.send("You already have an existing application in progress.")
+            return
+
+        # Create a new enlistment application
+        application = {"questions": [], "answers": [], "status": None, "reason": None}
+
         # List of enlistment questions
-        self.enlistment_questions = [
+        enlistment_questions = [
             "What is your full name?",
             "What is your age?",
-            "Gamertag?",
+            "Where are you from?",
             "What interests you about joining ONI?",
-            "Do you have any previous experience?",
+            "Do you have any previous experience relevant to ONI?",
             "What skills can you bring to ONI?",
             "How did you hear about ONI?",
             "What time zone are you in?",
             "Are you comfortable with following orders?",
-            "What are your goals within ONI?"
-            "Give us a bit about yourself?"
+            "Do you understand the confidentiality of ONI missions?"
         ]
 
-    @commands.command(name="enlist")
-    async def enlist(self, ctx):
-        # Initialize answers
-        answers = []
-
         # Send questions to the user in DMs
-        for question in self.enlistment_questions:
-            dm_channel = await ctx.author.create_dm()
+        dm_channel = await ctx.author.create_dm()
+        for question in enlistment_questions:
             await dm_channel.send(question)
             try:
                 response = await self.bot.wait_for('message', timeout=300, check=lambda m: m.author == ctx.author and m.channel == dm_channel)
-                answers.append(response.content)
+                application["questions"].append(question)
+                application["answers"].append(response.content)
             except asyncio.TimeoutError:
                 await ctx.send("You took too long to respond. The enlistment process has been canceled.")
                 return
 
-        # Store or process answers as needed
-        # In this example, we just print the answers
-        for i, answer in enumerate(answers):
-            await ctx.send(f"Question {i + 1}: Your answer - {answer}")
-
-        # Send the answers to a specific channel
-        enlistment_channel = self.bot.get_channel(1162833977132982302)  # Replace with the actual channel ID
+        # Send the application to a specific channel for review
+        enlistment_channel = self.bot.get_channel(YOUR_ENLISTMENT_ID)  # Replace with the actual channel ID
         if enlistment_channel:
-            # Format answers as a message
-            answers_message = "\n".join([f"Question {i + 1}: {question}\nAnswer: {answer}" for i, (question, answer) in enumerate(zip(self.enlistment_questions, answers))])
-            await enlistment_channel.send(f"New enlistment application from {ctx.author.mention}:\n{answers_message}")
+            # Create an embed for the application
+            embed = discord.Embed(title="Enlistment Application", color=discord.Color.blue())
+            for question, answer in zip(application["questions"], application["answers"]):
+                embed.add_field(name=question, value=answer, inline=False)
+            embed.set_footer(text=f"Submitted by {ctx.author.display_name}")
+
+            # Send the application as an embed
+            message = await enlistment_channel.send(embed=embed)
+            application["message"] = message.id
+            self.applications[ctx.author.id] = application
+
+            # Add reactions for approval and denial
+            await message.add_reaction("✅")  # Approve
+            await message.add_reaction("❌")  # Deny
 
 def setup(bot):
     bot.add_cog(Enlistment(bot))
