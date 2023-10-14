@@ -27,3 +27,5 @@ if BOT_TOKEN is None:
     raise ValueError("DISCORD_BOT_TOKEN environment variable is not set.")
 
 bot.run(BOT_TOKEN)
+
+asyncio.run(main())
