@@ -67,11 +67,11 @@ class Enlistment(commands.Cog):
             await message.add_reaction("✅")  # Approve
             await message.add_reaction("❌")  # Deny
 
-            def check_reaction(reaction, user):
-                return user != ctx.author and reaction.message.id == message.id
+            def check_reaction(reaction, reactor):
+                return reactor != ctx.author and reaction.message.id == message.id
 
             try:
-                reaction, _ = await self.bot.wait_for('reaction_add', timeout=300, check=check_reaction)
+                reaction, user = await self.bot.wait_for('reaction_add', timeout=300, check=check_reaction)
                 if reaction.emoji == "✅":
                     # Approve the application
                     application["status"] = "Approved"
