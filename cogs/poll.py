@@ -40,7 +40,7 @@ class Poll(commands.Cog):
 
         # Send the poll as an embed
         poll_message = discord.Embed(title=f"Poll: {question}", description="React with ✅ or ❌ to vote.")
-        poll_message.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar.url)
+        poll_message.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar_url_as(static_format='png'))
 
         for index, option in enumerate(options):
             poll_message.add_field(name=f"Option {index + 1}", value=option)
