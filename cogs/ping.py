@@ -15,4 +15,4 @@ class ping(commands.Cog):
         await message.edit(content=f"Pong! Latency is {latency:.2f}ms")
 
 def setup(bot):
-    bot.add_cog(Ping(bot))
+    bot.add_cog(ping(bot))
