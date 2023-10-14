@@ -14,6 +14,6 @@ class Ping(commands.Cog):
         latency = (after - before).total_seconds() * 1000
         await message.edit(content=f"Pong! Latency is {latency:.2f}ms")
 
-def setup(bot):
+async def setup(bot):
     print(f"Setting up the Ping cog...")
     bot.add_cog(Ping(bot))
