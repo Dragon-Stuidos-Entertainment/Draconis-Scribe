@@ -1,40 +1,28 @@
-import discord
-from discord.ext import commands
-from discord.ext.commands import Context
-import asyncio  # Add this import for handling duration
+@commands.command(name="create_poll")
+async def create_poll(self, ctx: Context, question, duration: int, *options):
+    # Create a new poll
+    if ctx.author.id in self.active_polls:
+        await ctx.send("You already have an active poll. Finish or cancel it before creating a new one.")
+        return
 
-class Poll(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
-        self.active_polls = {}  # Store active polls in this dictionary
+    if len(options) < 2:
+        await ctx.send("You need to provide at least two options for the poll.")
+        return
 
-    @commands.command(name="create_poll")
-    async def create_poll(self, ctx: Context, question, duration: int, *options):
-        # Create a new poll
-        if ctx.author.id in self.active_polls:
-            await ctx.send("You already have an active poll. Finish or cancel it before creating a new one.")
-            return
+    poll = {"question": question, "options": list(options), "votes": {}}
+    self.active_polls[ctx.author.id] = poll
 
-        if len(options) < 2:
-            await ctx.send("You need to provide at least two options for the poll.")
-            return
+    # Set the poll duration in seconds
+    poll_duration = duration
 
-        poll = {"question": question, "options": list(options), "votes": {}}
-        self.active_polls[ctx.author.id] = poll
+    # Send the poll to the channel
+    poll_message = f"**{question}**\n"
+    for index, option in enumerate(options):
+        poll_message += f"{index + 1}. {option}\n"
 
-        # Send the poll to the channel
-        poll_message = f"**{question}**\n"
-        for index, option in enumerate(options):
-            poll_message += f"{index + 1}. {option}\n"
+    poll_message += f"\nVote using the command: !vote <option_number> (Poll will end in {poll_duration} seconds)"
+    await ctx.send(poll_message)
 
-        poll_message += "\nVote using the command: !vote <option_number>"
-        await ctx.send(poll_message)
-
-        # Set up a timer to automatically finish the poll after the specified duration
-        await asyncio.sleep(duration)
-        await self.finish_poll(ctx)
-
-    # ... (other commands remain the same)
-
-def setup(bot):
-    bot.add_cog(Poll(bot))
+    # Schedule the poll to end after the specified duration
+    await asyncio.sleep(poll_duration)
+    await self.finish_poll(ctx)
