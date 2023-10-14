@@ -32,9 +32,9 @@ class Enlistment(commands.Cog):
             "How did you hear about ONI?",
             "What time zone are you in?",
             "Previous Clans?",
-            "What are your goals",
-            "Motivation in being a part of a clan",
-            "How active can you be"
+            "What are your goals?",
+            "Motivation in being a part of a clan?",
+            "How active can you be?"
         ]
 
         # Send questions to the user in DMs
@@ -68,19 +68,19 @@ class Enlistment(commands.Cog):
             await message.add_reaction("❌")  # Deny
 
             def check_reaction(reaction, user):
-                return user != self.bot.user and reaction.message.id == message.id
+                return user != ctx.author and reaction.message.id == message.id
 
             try:
                 reaction, _ = await self.bot.wait_for('reaction_add', timeout=300, check=check_reaction)
                 if reaction.emoji == "✅":
                     # Approve the application
                     application["status"] = "Approved"
-                    application["approver"] = ctx.author  # Approver is the user who added the reaction
+                    application["approver"] = reaction.message.guild.get_member(reaction.user.id)
                     await dm_channel.send(f"Your application has been approved by {application['approver'].display_name}. Congratulations!")
                 elif reaction.emoji == "❌":
                     # Deny the application
                     application["status"] = "Denied"
-                    application["approver"] = ctx.author  # Approver is the user who added the reaction
+                    application["approver"] = reaction.message.guild.get_member(reaction.user.id)
                     await dm_channel.send(f"Your application has been denied by {application['approver'].display_name}. We appreciate your interest!")
 
             except asyncio.TimeoutError:
@@ -100,12 +100,12 @@ class Enlistment(commands.Cog):
                 if reaction.emoji == "✅":
                     # Approve the application
                     application["status"] = "Approved"
-                    application["approver"] = user
+                    application["approver"] = reaction.message.guild.get_member(user.id)
                     await reaction.message.channel.send(f"Application for {user.mention} has been approved. Congratulations, you have been approved!")
                 elif reaction.emoji == "❌":
                     # Deny the application
                     application["status"] = "Denied"
-                    application["approver"] = user
+                    application["approver"] = reaction.message.guild.get_member(user.id)
                     await reaction.message.channel.send(f"Application for {user.mention} has been denied. We appreciate your interest!")
 
             self.applications[int(user_id)] = application
@@ -117,4 +117,8 @@ class Enlistment(commands.Cog):
 
     async def send_denial_notification(self, application):
         # Send a denial notification to the applicant
-        dm_channel = await self.bot.get_user(application
+        dm_channel = await the bot.get_user(application["message"].author.id).create_dm()
+        await dm_channel.send(f"Your application has been denied by {application['approver'].display_name}. We appreciate your interest!")
+
+def setup(bot):
+    bot.add_cog(Enlistment(bot))
