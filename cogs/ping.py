@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 import datetime
 
-class Ping(commands.Cog):
+class ping(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
