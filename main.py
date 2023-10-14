@@ -10,15 +10,11 @@ intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
 # Load all extensions (cogs) from the "cogs" directory
-async def load():
-    for filename in os.listdir('./cogs'):
-        if filename.endswith('.py'):
-            await bot.load_extension(f'cogs.{filename[:-3]}')  # Use "await" here
 
 @bot.event
 async def on_ready():
     print(f'Logged in as {bot.user.name} ({bot.user.id})')
-
+    await bot.load_extentions("cogs.ping, cogs.clear")
 # Your other event functions and commands here
 
 # Read the bot token from the environment variable
