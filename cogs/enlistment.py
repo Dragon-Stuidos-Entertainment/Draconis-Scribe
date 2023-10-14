@@ -68,7 +68,7 @@ class Enlistment(commands.Cog):
                 return user == ctx.author and reaction.message.id == message.id
 
             try:
-                reaction, user = await self.bot.wait_for('reaction_add', timeout=300, check=check_reaction)
+                reaction, _ = await self.bot.wait_for('reaction_add', timeout=300, check=check_reaction)
                 if reaction.emoji == "✅":
                     # Approve the application
                     application["status"] = "Approved"
@@ -77,22 +77,27 @@ class Enlistment(commands.Cog):
                     # Deny the application
                     application["status"] = "Denied"
                     await dm_channel.send("Your application has been denied. Please provide a reason for denial.")
+
             except asyncio.TimeoutError:
                 await dm_channel.send("You took too long to react. The application status has been left pending.")
-
+        else:
+            await ctx.send("Enlistment channel not found. Please contact the server administrator.")
+    
     @commands.Cog.listener()
     async def on_message(self, message):
         # Check if the message is a response to an approved/denied application
         if message.author == self.bot.user:
-            user_id = message.content.splitlines()[0].split("Application for ")[1]
-            application = self.applications.get(int(user_id))
-            if application:
-                application["reason"] = message.content.splitlines()[-1]
-                if "Approved" in application["status"]:
-                    await self.send_approval_notification(application)
-                elif "Denied" in application["status"]:
-                    await self.send_denial_notification(application)
-                del self.applications[int(user_id)]
+            parts = message.content.split("Application for")
+            if len(parts) == 2:
+                user_id = parts[1].splitlines()[0].strip()
+                application = self.applications.get(int(user_id))
+                if application:
+                    application["reason"] = parts[1].splitlines()[1].strip()
+                    if "Approved" in application["status"]:
+                        await self.send_approval_notification(application)
+                    elif "Denied" in application["status"]:
+                        await self.send_denial_notification(application)
+                    del self.applications[int(user_id)]
 
     async def send_approval_notification(self, application):
         # Send an approval notification to the applicant
