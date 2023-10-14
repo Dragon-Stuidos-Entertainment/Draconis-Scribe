@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 import datetime
 
-class ping(commands.Cog):
+class Ping(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -15,4 +15,4 @@ class ping(commands.Cog):
         await message.edit(content=f"Pong! Latency is {latency:.2f}ms")
 
 def setup(bot):
-    bot.add_cog(ping(bot))
+    bot.add_cog(Ping(bot))

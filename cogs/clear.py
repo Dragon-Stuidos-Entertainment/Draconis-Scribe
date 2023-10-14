@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-class clear(commands.Cog):
+class Clear(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -13,4 +13,4 @@ class clear(commands.Cog):
             await ctx.send("You don't have permission to manage messages.")
 
 def setup(bot):
-    bot.add_cog(clear(bot))
+    bot.add_cog(Clear(bot))
