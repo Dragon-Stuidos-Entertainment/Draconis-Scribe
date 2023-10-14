@@ -64,47 +64,45 @@ class Enlistment(commands.Cog):
             await message.add_reaction("✅")  # Approve
             await message.add_reaction("❌")  # Deny
 
+            def check_reaction(reaction, user):
+                return user == ctx.author and reaction.message.id == message.id
+
+            try:
+                reaction, user = await self.bot.wait_for('reaction_add', timeout=300, check=check_reaction)
+                if reaction.emoji == "✅":
+                    # Approve the application
+                    application["status"] = "Approved"
+                    await dm_channel.send("Your application has been approved. Please provide a reason for approval.")
+                elif reaction.emoji == "❌":
+                    # Deny the application
+                    application["status"] = "Denied"
+                    await dm_channel.send("Your application has been denied. Please provide a reason for denial.")
+            except asyncio.TimeoutError:
+                await dm_channel.send("You took too long to react. The application status has been left pending.")
+
     @commands.Cog.listener()
-    async def on_reaction_add(self, reaction, user):
-        # Check if the reaction was added to an enlistment application message
-        if user.bot:
-            return
+    async def on_message(self, message):
+        # Check if the message is a response to an approved/denied application
+        if message.author == self.bot.user:
+            user_id = message.content.splitlines()[0].split("Application for ")[1]
+            application = self.applications.get(int(user_id))
+            if application:
+                application["reason"] = message.content.splitlines()[-1]
+                if "Approved" in application["status"]:
+                    await self.send_approval_notification(application)
+                elif "Denied" in application["status"]:
+                    await self.send_denial_notification(application)
+                del self.applications[int(user_id)]
 
-        message = reaction.message
-        if message.id in self.applications.values():
-            # Check the reaction and user
-            application = next((app for app in self.applications if self.applications[app]["message"] == message.id), None)
+    async def send_approval_notification(self, application):
+        # Send an approval notification to the applicant
+        dm_channel = await self.bot.get_user(application["message"].author.id).create_dm()
+        await dm_channel.send(f"Your application has been approved with the following reason: {application['reason']}")
 
-            if reaction.emoji == "✅":
-                # Approve the application
-                self.applications[application]["status"] = "Approved"
-
-                # Ask for a reason for approval
-                await message.clear_reactions()
-                await message.edit(content=f"Application for {user.display_name} has been approved. Please provide a reason for approval.")
-                try:
-                    reason_response = await self.bot.wait_for('message', timeout=300, check=lambda m: m.author == user and m.channel == message.channel)
-                    self.applications[application]["reason"] = reason_response.content
-                except asyncio.TimeoutError:
-                    self.applications[application]["reason"] = "No reason provided."
-
-                # Notify the user
-                await user.send(f"Your application has been approved with the following reason: {self.applications[application]['reason']}")
-            elif reaction.emoji == "❌":
-                # Deny the application
-                self.applications[application]["status"] = "Denied"
-
-                # Ask for a reason for denial
-                await message.clear_reactions()
-                await message.edit(content=f"Application for {user.display_name} has been denied. Please provide a reason for denial.")
-                try:
-                    reason_response = await self.bot.wait_for('message', timeout=300, check=lambda m: m.author == user and m.channel == message.channel)
-                    self.applications[application]["reason"] = reason_response.content
-                except asyncio.TimeoutError:
-                    self.applications[application]["reason"] = "No reason provided."
-
-                # Notify the user
-                await user.send(f"Your application has been denied with the following reason: {self.applications[application]['reason']}")
+    async def send_denial_notification(self, application):
+        # Send a denial notification to the applicant
+        dm_channel = await self.bot.get_user(application["message"].author.id).create_dm()
+        await dm_channel.send(f"Your application has been denied with the following reason: {application['reason']}")
 
 def setup(bot):
     bot.add_cog(Enlistment(bot))
