@@ -30,6 +30,9 @@ class Poll(commands.Cog):
         await poll_message.add_reaction("✅")  # Add ✅ reaction
         await poll_message.add_reaction("❌")  # Add ❌ reaction
 
+        # Delete the command message
+        await ctx.message.delete()
+
     @commands.command(name="finish_poll")
     async def finish_poll(self, ctx: commands.Context):
         # Finish the active poll and display results
