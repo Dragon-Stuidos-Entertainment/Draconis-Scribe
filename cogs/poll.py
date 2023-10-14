@@ -82,11 +82,11 @@ class Poll(commands.Cog):
     @commands.command(name="cancel_poll")
     async def cancel_poll(self, ctx: Context):
         # Cancel the active poll
-        if ctx.author.id not in this.active_polls:
+        if ctx.author.id not in self.active_polls:
             await ctx.send("There is no active poll to cancel.")
             return
 
-        this.active_polls.pop(ctx.author.id)
+        self.active_polls.pop(ctx.author.id)
         await ctx.send("The active poll has been canceled.")
 
 def setup(bot):
