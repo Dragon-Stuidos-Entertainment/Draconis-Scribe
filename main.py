@@ -15,7 +15,11 @@ async def on_ready():
 
     for filename in os.listdir('./cogs'):
         if filename.endswith('.py'):
-            bot.load_extension(f'cogs.{filename[:-3]}')
+            try:
+                bot.load_extension(f'cogs.{filename[:-3]}')
+                print(f'Loaded extension: {filename[:-3]}')
+            except Exception as e:
+                print(f'Failed to load extension {filename[:-3]}. Error: {str(e)}')
 
 # Read the bot token from the environment variable
 BOT_TOKEN = os.getenv('DISCORD_BOT_TOKEN')
