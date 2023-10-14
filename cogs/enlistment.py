@@ -25,14 +25,16 @@ class Enlistment(commands.Cog):
         enlistment_questions = [
             "What is your full name?",
             "What is your age?",
-            "Where are you from?",
+            "Gamertag?",
             "What interests you about joining ONI?",
-            "Do you have any previous experience relevant to ONI?",
+            "Do you have any previous experience?",
             "What skills can you bring to ONI?",
             "How did you hear about ONI?",
             "What time zone are you in?",
-            "Are you comfortable with following orders?",
-            "Do you understand the confidentiality of ONI missions?"
+            "Previous Clans?",
+            "What are your goals?"
+            "Motivation in being apart of a clan?"
+            "How active can you be?"
         ]
 
         # Send questions to the user in DMs
