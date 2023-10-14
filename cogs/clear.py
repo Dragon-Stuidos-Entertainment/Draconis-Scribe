@@ -12,6 +12,5 @@ class Clear(commands.Cog):
         else:
             await ctx.send("You don't have permission to manage messages.")
 
-async def setup(bot):
-     print(f"Setting up the Clear cog...")
-     bot.add_cog(Clear(bot))
+def setup(bot):
+    bot.add_cog(Clear(bot))
