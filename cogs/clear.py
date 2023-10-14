@@ -14,4 +14,3 @@ class Clear(commands.Cog):
 
 def setup(bot):
     bot.add_cog(Clear(bot))
-    print("Clear cog has been loaded.")  # Add this line
