@@ -11,9 +11,8 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 
 # Load all extensions (cogs) from the "cogs" directory
 async def load_cogs():
-    for filename in os.listdir('./cogs'):
-        if filename.endswith('.py'):
-            bot.load_extension(f'cogs.{filename[:-3]}')
+    bot.load_extension("cogs.ping")
+    bot.load_extension("cogs.clear")
 
 @bot.event
 async def on_ready():
