@@ -19,7 +19,7 @@ class Enlistment(commands.Cog):
             return
 
         # Create a new enlistment application
-        application = {"questions": [], "answers": [], "status": None, "reason": None, "approver": None, "applicant": ctx.author}
+        application = {"questions": [], "answers": [], "status": None, "reason": None, "approver": None}
 
         # List of enlistment questions
         enlistment_questions = [
@@ -32,9 +32,9 @@ class Enlistment(commands.Cog):
             "How did you hear about ONI?",
             "What time zone are you in?",
             "Previous Clans?",
-            "What are your goals?",
-            "Motivation in being a part of a clan?",
-            "How active can you be?"
+            "What are your goals",
+            "Motivation in being a part of a clan",
+            "How active can you be"
         ]
 
         # Send questions to the user in DMs
@@ -61,7 +61,7 @@ class Enlistment(commands.Cog):
             # Send the application as an embed
             message = await enlistment_channel.send(embed=embed)
             application["message"] = message.id
-            self.applications[message.id] = application
+            self.applications[ctx.author.id] = application
 
             # Add reactions for approval and denial
             await message.add_reaction("✅")  # Approve
@@ -76,12 +76,13 @@ class Enlistment(commands.Cog):
                     # Approve the application
                     application["status"] = "Approved"
                     application["approver"] = reaction.message.guild.get_member(reaction.user.id)
-                    await dm_channel.send(f"Your application has been approved by {application['approver'].display_name}. Please provide a reason for approval.")
+                    await dm_channel.send(f"Your application has been approved by {application['approver'].display_name}. Congratulations!")
                 elif reaction.emoji == "❌":
                     # Deny the application
                     application["status"] = "Denied"
                     application["approver"] = reaction.message.guild.get_member(reaction.user.id)
-                    await dm_channel.send(f"Your application has been denied by {application['approver'].display_name}. Please provide a reason for denial.")
+                    await dm_channel.send(f"Your application has been denied by {application['approver'].display_name}. We appreciate your interest!")
+                # You can remove the section that asked for a reason here
 
             except asyncio.TimeoutError:
                 await dm_channel.send("You took too long to react. The application status has been left pending.")
@@ -94,29 +95,32 @@ class Enlistment(commands.Cog):
             return  # Ignore reactions by the bot
 
         if reaction.message.author == self.bot.user:
-            application = self.applications.get(reaction.message.id)
+            user_id = reaction.message.content.splitlines()[0].split("Application for ")[1]
+            application = self.applications.get(int(user_id))
             if application:
                 if reaction.emoji == "✅":
                     # Approve the application
                     application["status"] = "Approved"
-                    application["approver"] = user
-                    await reaction.message.channel.send(f"Application for {application['applicant'].mention} has been approved. Please provide a reason for approval.")
+                    application["approver"] = reaction.message.guild.get_member(user.id)
+                    await reaction.message.channel.send(f"Application for {user.mention} has been approved. Congratulations you have been approved a nco will contact you soon!")
                 elif reaction.emoji == "❌":
                     # Deny the application
                     application["status"] = "Denied"
-                    application["approver"] = user
-                    await reaction.message.channel.send(f"Application for {application['applicant'].mention} has been denied. Please provide a reason for denial.")
-                self.applications[reaction.message.id] = application
+                    application["approver"] = reaction.message.guild.get_member(user.id)
+                    await reaction.message.channel.send(f"Application for {user.mention} has been denied. We appreciate your interest!")
+
+                # You can remove the section that asked for a reason here
+                self.applications[int(user_id)] = application
 
     async def send_approval_notification(self, application):
         # Send an approval notification to the applicant
-        dm_channel = await self.bot.get_user(application["applicant"].id).create_dm()
-        await dm_channel.send(f"Your application has been approved by {application['approver'].display_name} with the following reason: {application['reason']}")
+        dm_channel = await self.bot.get_user(application["message"].author.id).create_dm()
+        await dm_channel.send(f"Your application has been approved by {application['approver'].display_name}. Congratulations!")
 
     async def send_denial_notification(self, application):
         # Send a denial notification to the applicant
-        dm_channel = await self.bot.get_user(application["applicant"].id).create_dm()
-        await dm_channel.send(f"Your application has been denied by {application['approver'].display_name} with the following reason: {application['reason']}")
+        dm_channel = await self.bot.get_user(application["message"].author.id).create_dm()
+        await dm_channel.send(f"Your application has been denied by {application['approver'].display_name}. We appreciate your interest!")
 
 def setup(bot):
     bot.add_cog(Enlistment(bot))
