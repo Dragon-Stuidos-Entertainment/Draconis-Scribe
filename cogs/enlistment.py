@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-YOUR_ENLISTMENT_ID =1162833977132982302
+YOUR_ENLISTMENT_ID = 1162833977132982302
 
 class Enlistment(commands.Cog):
     def __init__(self, bot):
@@ -63,6 +63,48 @@ class Enlistment(commands.Cog):
             # Add reactions for approval and denial
             await message.add_reaction("✅")  # Approve
             await message.add_reaction("❌")  # Deny
+
+    @commands.Cog.listener()
+    async def on_reaction_add(self, reaction, user):
+        # Check if the reaction was added to an enlistment application message
+        if user.bot:
+            return
+
+        message = reaction.message
+        if message.id in self.applications.values():
+            # Check the reaction and user
+            application = next((app for app in self.applications if self.applications[app]["message"] == message.id), None)
+
+            if reaction.emoji == "✅":
+                # Approve the application
+                self.applications[application]["status"] = "Approved"
+
+                # Ask for a reason for approval
+                await message.clear_reactions()
+                await message.edit(content=f"Application for {user.display_name} has been approved. Please provide a reason for approval.")
+                try:
+                    reason_response = await self.bot.wait_for('message', timeout=300, check=lambda m: m.author == user and m.channel == message.channel)
+                    self.applications[application]["reason"] = reason_response.content
+                except asyncio.TimeoutError:
+                    self.applications[application]["reason"] = "No reason provided."
+
+                # Notify the user
+                await user.send(f"Your application has been approved with the following reason: {self.applications[application]['reason']}")
+            elif reaction.emoji == "❌":
+                # Deny the application
+                self.applications[application]["status"] = "Denied"
+
+                # Ask for a reason for denial
+                await message.clear_reactions()
+                await message.edit(content=f"Application for {user.display_name} has been denied. Please provide a reason for denial.")
+                try:
+                    reason_response = await self.bot.wait_for('message', timeout=300, check=lambda m: m.author == user and m.channel == message.channel)
+                    self.applications[application]["reason"] = reason_response.content
+                except asyncio.TimeoutError:
+                    self.applications[application]["reason"] = "No reason provided."
+
+                # Notify the user
+                await user.send(f"Your application has been denied with the following reason: {self.applications[application]['reason']}")
 
 def setup(bot):
     bot.add_cog(Enlistment(bot))
