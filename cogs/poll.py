@@ -1,13 +1,31 @@
 import discord
 from discord.ext import commands
+from discord.ext.commands import Context
 
 class Poll(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.active_polls = {}  # Store active polls in this dictionary
 
+    @commands.Cog.listener()
+    async def on_reaction_add(self, reaction, user):
+        # Handle reactions for active polls
+        if user == self.bot.user:
+            return  # Ignore reactions by the bot
+
+        if reaction.message.id in self.active_polls:
+            poll = self.active_polls[reaction.message.id]
+            if reaction.emoji == "✅":
+                await reaction.message.remove_reaction("✅", user)
+                if user.id not in poll["votes"]:
+                    poll["votes"].append(user.id)
+            elif reaction.emoji == "❌":
+                await reaction.message.remove_reaction("❌", user)
+                if user.id in poll["votes"]:
+                    poll["votes"].remove(user.id)
+
     @commands.command(name="create_poll")
-    async def create_poll(self, ctx: commands.Context, question, *options):
+    async def create_poll(self, ctx: Context, question, *options):
         # Create a new poll
         if ctx.author.id in self.active_polls:
             await ctx.send("You already have an active poll. Finish or cancel it before creating a new one.")
@@ -17,52 +35,52 @@ class Poll(commands.Cog):
             await ctx.send("You need to provide at least two options for the poll.")
             return
 
-        poll = {"question": question, "options": list(options), "votes": {}}
+        poll = {"question": question, "options": list(options), "votes": []}
         self.active_polls[ctx.author.id] = poll
 
-        # Create an embedded poll message
-        poll_embed = discord.Embed(title=f"**{question}**", description="Vote by reacting with ✅ or ❌")
+        # Send the poll as an embed
+        poll_message = discord.Embed(title=f"Poll: {question}", description="React with ✅ or ❌ to vote.")
+        poll_message.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar_url)
 
         for index, option in enumerate(options):
-            poll_embed.add_field(name=f"Option {index + 1}", value=option, inline=False)
+            poll_message.add_field(name=f"Option {index + 1}", value=option)
 
-        poll_message = await ctx.send(embed=poll_embed)
-        await poll_message.add_reaction("✅")  # Add ✅ reaction
-        await poll_message.add_reaction("❌")  # Add ❌ reaction
+        poll_message.set_footer(text="Poll created by " + ctx.author.display_name)
 
-        # Delete the command message
-        await ctx.message.delete()
+        poll_message = await ctx.send(embed=poll_message)
+        await poll_message.add_reaction("✅")
+        await poll_message.add_reaction("❌")
 
     @commands.command(name="finish_poll")
-    async def finish_poll(self, ctx: commands.Context):
+    async def finish_poll(self, ctx: Context):
         # Finish the active poll and display results
         if ctx.author.id not in self.active_polls:
             await ctx.send("There is no active poll to finish.")
             return
 
         poll = self.active_polls.pop(ctx.author.id)
-        results = {option: 0 for option in poll["options"]}
+        yes_votes = 0
+        no_votes = 0
 
-        # Fetch the poll message for reactions
-        async for message in ctx.channel.history(limit=1):
-            if message.id == poll_message.id:
-                poll_message = message
-                break
+        for user_id in poll["votes"]:
+            member = ctx.guild.get_member(user_id)
+            if member:
+                if "✅" in [str(react) for react in member.activities]:
+                    yes_votes += 1
+                if "❌" in [str(react) for react in member.activities]:
+                    no_votes += 1
 
-        for reaction in poll_message.reactions:
-            if reaction.emoji == "✅":
-                results[poll["options"][0]] = reaction.count
-            elif reaction.emoji == "❌":
-                results[poll["options"][1]] = reaction.count
-
-        result_message = "Poll Results:\n"
-        for option, count in results.items():
-            result_message += f"{option}: {count} votes\n"
+        result_message = (
+            f"Poll Results:\n"
+            f"Question: {poll['question']}\n"
+            f"Yes Votes: {yes_votes}\n"
+            f"No Votes: {no_votes}"
+        )
 
         await ctx.send(result_message)
 
     @commands.command(name="cancel_poll")
-    async def cancel_poll(self, ctx: commands.Context):
+    async def cancel_poll(self, ctx: Context):
         # Cancel the active poll
         if ctx.author.id not in self.active_polls:
             await ctx.send("There is no active poll to cancel.")
