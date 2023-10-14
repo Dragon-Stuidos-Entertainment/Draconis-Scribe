@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 from discord.ext.commands import Context
+import asyncio
 
 class Poll(commands.Cog):
     def __init__(self, bot):
@@ -8,7 +9,7 @@ class Poll(commands.Cog):
         self.active_polls = {}  # Store active polls in this dictionary
 
     @commands.command(name="create_poll")
-    async def create_poll(self, ctx: Context, question, *options):
+    async def create_poll(self, ctx: Context, duration: int, question, *options):
         # Create a new poll
         if ctx.author.id in self.active_polls:
             await ctx.send("You already have an active poll. Finish or cancel it before creating a new one.")
@@ -26,33 +27,24 @@ class Poll(commands.Cog):
         for index, option in enumerate(options):
             poll_message += f"{index + 1}. {option}\n"
 
-        poll_message += "\nVote using the command: !vote <option_number>"
-        await ctx.send(poll_message)
+        poll_message += f"\nVote using the command: !vote <option_number> within {duration} seconds"
+        poll_message = await ctx.send(poll_message)
 
-    @commands.command(name="vote")
-    async def vote(self, ctx: Context, option_number: int):
-        # Allow users to vote in the active poll
-        if ctx.author.id not in self.active_polls:
-            await ctx.send("There is no active poll to vote in.")
+        # Add reaction emojis to the poll message
+        for i in range(1, len(options) + 1):
+            emoji = f"{i}\N{COMBINING ENCLOSING KEYCAP}"
+            await poll_message.add_reaction(emoji)
+
+        # Set a timer to end the poll
+        await asyncio.sleep(duration)
+        await self.finish_poll(ctx.author.id, poll_message)
+
+    async def finish_poll(self, author_id, poll_message):
+        if author_id not in self.active_polls:
             return
 
-        poll = self.active_polls[ctx.author.id]
-        if option_number < 1 or option_number > len(poll["options"]):
-            await ctx.send("Invalid option number. Please vote for a valid option.")
-            return
-
-        user_id = ctx.author.id
-        poll["votes"][user_id] = option_number
-        await ctx.send(f"Your vote for option {option_number} has been recorded.")
-
-    @commands.command(name="finish_poll")
-    async def finish_poll(self, ctx: Context):
-        # Finish the active poll and display results
-        if ctx.author.id not in self.active_polls:
-            await ctx.send("There is no active poll to finish.")
-            return
-
-        poll = self.active_polls.pop(ctx.author.id)
+        poll_data = self.active_polls.pop(author_id)
+        poll = poll_data
         results = {option: 0 for option in poll["options"]}
 
         for vote in poll["votes"].values():
@@ -62,17 +54,20 @@ class Poll(commands.Cog):
         for option, count in results.items():
             result_message += f"{option}: {count} votes\n"
 
-        await ctx.send(result_message)
+        await poll_message.edit(content=result_message)
 
-    @commands.command(name="cancel_poll")
-    async def cancel_poll(self, ctx: Context):
-        # Cancel the active poll
-        if ctx.author.id not in self.active_polls:
-            await ctx.send("There is no active poll to cancel.")
-            return
+    @commands.Cog.listener()
+    async def on_reaction_add(self, reaction, user):
+        if user.bot:
+            return  # Ignore reactions by the bot
 
-        self.active_polls.pop(ctx.author.id)
-        await ctx.send("The active poll has been canceled.")
+        for author_id, poll in self.active_polls.items():
+            if reaction.message.content.startswith(poll["question"]):
+                emoji = reaction.emoji
+                emoji_str = emoji[0] if not emoji.isnumeric() else emoji
+                if emoji_str in poll["options"]:
+                    poll["votes"][user.id] = poll["options"].index(emoji_str) + 1
+                    return
 
 def setup(bot):
     bot.add_cog(Poll(bot))
