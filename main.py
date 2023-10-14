@@ -20,6 +20,22 @@ def load_extensions():
 async def on_ready():
     print(f'Logged in as {bot.user.name} ({bot.user.id})')
     load_extensions()  # Load all extensions (cogs)
+    
+    # Replace this with your channel ID
+    your_channel_id = 1162830886723657869
+    
+    channel = bot.get_channel(your_channel_id)
+    if channel:
+        await channel.send("Bot is online and ready for action!")
+
+@bot.event
+async def on_disconnect():
+    # Replace this with your channel ID
+    your_channel_id = 1162830886723657869
+    
+    channel = bot.get_channel(your_channel_id)
+    if channel:
+        await channel.send("Bot is undergoing maintenance and is now offline.")
 
 # Your other event functions and commands here
 
