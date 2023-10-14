@@ -9,7 +9,7 @@ class Welcome(commands.Cog):
     async def on_member_join(self, member):
         channel_id = 1162823959725740103  # Replace with the actual channel ID where you want to send the welcome message
 
-        channel_to_read = "#enlist-now", "#how-to-join", "about-us"  # Replace with the actual channel name you want to mention
+        channel_to_read = "#enlist-now"  # Replace with the actual channel name you want to mention
 
         channel = self.bot.get_channel(channel_id)
 
