@@ -82,7 +82,6 @@ class Enlistment(commands.Cog):
                     application["status"] = "Denied"
                     application["approver"] = reaction.message.guild.get_member(reaction.user.id)
                     await dm_channel.send(f"Your application has been denied by {application['approver'].display_name}. We appreciate your interest!")
-                # You can remove the section that asked for a reason here
 
             except asyncio.TimeoutError:
                 await dm_channel.send("You took too long to react. The application status has been left pending.")
@@ -95,22 +94,21 @@ class Enlistment(commands.Cog):
             return  # Ignore reactions by the bot
 
         if reaction.message.author == self.bot.user:
-            user_id = reaction.message.content.splitlines()[0].split("Application for ")[1]
+            user_id = reaction.message.embeds[0].footer.text.split("Submitted by ")[1]
             application = self.applications.get(int(user_id))
             if application:
                 if reaction.emoji == "✅":
                     # Approve the application
                     application["status"] = "Approved"
                     application["approver"] = reaction.message.guild.get_member(user.id)
-                    await reaction.message.channel.send(f"Application for {user.mention} has been approved. Congratulations you have been approved a nco will contact you soon!")
+                    await reaction.message.channel.send(f"Application for {user.mention} has been approved. Congratulations, you have been approved!")
                 elif reaction.emoji == "❌":
                     # Deny the application
                     application["status"] = "Denied"
                     application["approver"] = reaction.message.guild.get_member(user.id)
                     await reaction.message.channel.send(f"Application for {user.mention} has been denied. We appreciate your interest!")
 
-                # You can remove the section that asked for a reason here
-                self.applications[int(user_id)] = application
+            self.applications[int(user_id)] = application
 
     async def send_approval_notification(self, application):
         # Send an approval notification to the applicant

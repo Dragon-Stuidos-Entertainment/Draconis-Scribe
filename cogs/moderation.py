@@ -1,5 +1,8 @@
 import discord
 from discord.ext import commands
+import asyncio
+
+YOUR_MUTED_ROLE_NAME = "Muted"  # Replace with the actual muted role name
 
 class Moderation(commands.Cog):
     def __init__(self, bot):
@@ -21,38 +24,29 @@ class Moderation(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(manage_roles=True)
-    async def mute(self, ctx, member: discord.Member, *, reason="No reason provided"):
-        """Mute a member in the server."""
-        muted_role = discord.utils.get(ctx.guild.roles, name="Muted")  # Replace with your muted role name
+    async def mute(self, ctx, member: discord.Member, duration: int, *, reason="No reason provided"):
+        """Mute a member in the server for a specified duration (in seconds)."""
+        muted_role = discord.utils.get(ctx.guild.roles, name=YOUR_MUTED_ROLE_NAME)
         if muted_role is None:
             await ctx.send("Muted role not found. Please create one.")
             return
 
-        # Add the "Muted" role to the member
         await member.add_roles(muted_role, reason=reason)
+        await ctx.send(f"{member.mention} has been muted for {duration} seconds. Reason: {reason}")
 
-        # Prevent the member from talking in voice channels
-        for channel in ctx.guild.voice_channels:
-            await member.edit(mute=True, reason=f"Muted: {reason}")
-
-        await ctx.send(f"{member.mention} has been muted. Reason: {reason}")
+        await asyncio.sleep(duration)  # Wait for the specified duration
+        await member.remove_roles(muted_role)  # Unmute the member
 
     @commands.command()
     @commands.has_permissions(manage_roles=True)
     async def unmute(self, ctx, member: discord.Member):
         """Unmute a previously muted member."""
-        muted_role = discord.utils.get(ctx.guild.roles, name="Muted")  # Replace with your muted role name
+        muted_role = discord.utils.get(ctx.guild.roles, name=YOUR_MUTED_ROLE_NAME)
         if muted_role is None:
             await ctx.send("Muted role not found. Please create one.")
             return
 
-        # Remove the "Muted" role from the member
         await member.remove_roles(muted_role)
-
-        # Allow the member to talk in voice channels
-        for channel in ctx.guild.voice_channels:
-            await member.edit(mute=False)
-
         await ctx.send(f"{member.mention} has been unmuted")
 
     @commands.command()
