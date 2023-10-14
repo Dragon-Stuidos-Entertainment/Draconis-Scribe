@@ -93,22 +93,24 @@ class Enlistment(commands.Cog):
         if user == self.bot.user:
             return  # Ignore reactions by the bot
 
-        if reaction.message.author == self.bot.user:
-            user_id = reaction.message.embeds[0].footer.text.split("Submitted by ")[1]
-            application = self.applications.get(user_id)
-            if application:
-                if reaction.emoji == "✅":
-                    # Approve the application
-                    application["status"] = "Approved"
-                    application["approver"] = reaction.message.guild.get_member(user.id)
-                    await reaction.message.channel.send(f"Application for {user.mention} by {application['approver'].mention} has been approved. Congratulations, you have been approved!")
-                elif reaction.emoji == "❌":
-                    # Deny the application
-                    application["status"] = "Denied"
-                    application["approver"] = reaction.message.guild.get_member(user.id)
-                    await reaction.message.channel.send(f"Application for {user.mention} by {application['approver'].mention} has been denied. We appreciate your interest!")
+        if not reaction.message.embeds:
+            return  # No embeds in the message
 
-            self.applications[user_id] = application
+        user_id = reaction.message.embeds[0].footer.text.split("Submitted by ")[1]
+        application = self.applications.get(user_id)
+        if application:
+            if reaction.emoji == "✅":
+                # Approve the application
+                application["status"] = "Approved"
+                application["approver"] = reaction.message.guild.get_member(user.id)
+                await reaction.message.channel.send(f"Application for {user.mention} by {application['approver'].mention} has been approved. Congratulations, you have been approved!")
+            elif reaction.emoji == "❌":
+                # Deny the application
+                application["status"] = "Denied"
+                application["approver"] = reaction.message.guild.get_member(user.id)
+                await reaction.message.channel.send(f"Application for {user.mention} by {application['approver'].mention} has been denied. We appreciate your interest!")
+
+        self.applications[user_id] = application
 
     async def send_approval_notification(self, application):
         # Send an approval notification to the applicant
