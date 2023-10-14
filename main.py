@@ -1,7 +1,7 @@
 import os
 import discord
 from discord.ext import commands
-
+import asyncio
 intents = discord.Intents.default()
 intents.typing = False
 intents.presences = False
@@ -9,9 +9,10 @@ intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
 # Load all extensions (cogs) from the "cogs" directory
-for filename in os.listdir('./cogs'):
-    if filename.endswith('.py'):
-        await bot.load_extension(f'cogs.{filename[:-3]}')  # Use "await" here
+async def load():
+    for filename in os.listdir('./cogs'):
+        if filename.endswith('.py'):
+            await bot.load_extension(f'cogs.{filename[:-3]}')  # Use "await" here
 
 @bot.event
 async def on_ready():
