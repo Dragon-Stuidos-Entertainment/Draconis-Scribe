@@ -13,10 +13,6 @@ intents.members = True
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
-# Set the log channel ID before running the bot
-cog = ModerationLogger(bot)
-cog.set_log_channel_id(log_channel_id)
-bot.add_cog(cog)
 
 # Load all extensions (cogs) from the "cogs" directory
 def load_extensions():
