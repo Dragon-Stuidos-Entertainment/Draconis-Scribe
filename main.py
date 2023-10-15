@@ -1,7 +1,7 @@
 import os
 import discord
 from discord.ext import commands
-from moderation_logger import ModerationLogger  # Import the ModerationLogger
+
 
 intents = discord.Intents.default()
 intents.typing = False
@@ -20,11 +20,6 @@ def load_extensions():
 async def on_ready():
     print(f'Logged in as {bot.user.name} ({bot.user.id}')
     load_extensions()  # Load all extensions (cogs)
-
-    log_channel_id = 1163150349511696484  # Replace with your log channel ID
-    logger = ModerationLogger(bot, log_channel_id)  # Create an instance of ModerationLogger
-
-    bot.add_cog(logger)  # Add the ModerationLogger cog to the bot
 
     # Replace this with your channel ID
     your_channel_id = 1162892621895696394
