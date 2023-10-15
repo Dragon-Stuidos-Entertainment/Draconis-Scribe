@@ -14,9 +14,14 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 
 # Load all extensions (cogs) from the "cogs" directory
 def load_extensions():
+    loaded_cogs = []  # Create an empty list to store the names of loaded cogs
     for filename in os.listdir('./cogs'):
         if filename.endswith('.py'):
-            bot.load_extension(f'cogs.{filename[:-3]}')  # Extensions won't accept log_channel_id
+            cog_name = f'cogs.{filename[:-3]}'  # Generate the cog name
+            bot.load_extension(cog_name)
+            loaded_cogs.append(cog_name)  # Add the loaded cog name to the list
+    # Print the loaded cogs
+    print("Loaded cogs:", ", ".join(loaded_cogs))
 
 @bot.event
 async def on_ready():
