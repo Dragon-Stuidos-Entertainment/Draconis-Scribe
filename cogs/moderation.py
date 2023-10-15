@@ -38,11 +38,6 @@ class Moderation(commands.Cog):
         await user.remove_roles(muted_role)
         await ctx.send(f"{user.mention} has been unmuted")
 
-    @commands.command(name="clear")
-    @commands.has_permissions(manage_messages=True)
-    async def clear_messages(self, ctx, amount: int = 5):
-        await ctx.channel.purge(limit=amount + 1)  # +1 to include the command message
-
     @commands.command(name="warn")
     @commands.has_permissions(kick_members=True)
     async def warn_user(self, ctx, user: discord.Member, *, reason="No reason provided"):
