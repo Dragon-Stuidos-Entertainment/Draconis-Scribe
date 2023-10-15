@@ -2,7 +2,6 @@ import os
 import discord
 from discord.ext import commands
 
-
 intents = discord.Intents.default()
 intents.typing = False
 intents.presences = False
@@ -21,10 +20,10 @@ async def on_ready():
     print(f'Logged in as {bot.user.name} ({bot.user.id}')
     load_extensions()  # Load all extensions (cogs)
 
-    # Replace this with your channel ID
-    your_channel_id = 1162892621895696394
+    # Set the log_channel_id to the desired channel ID
+    log_channel_id = 1163150349511696484  # Replace with the actual channel ID
 
-    channel = bot.get_channel(your_channel_id)
+    channel = bot.get_channel(log_channel_id)
     if channel:
         await channel.send("Bot is online and ready for action!")
 
