@@ -13,17 +13,20 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 def load_extensions():
     for filename in os.listdir('./cogs'):
         if filename.endswith('.py'):
-            bot.load_extension(f'cogs.{filename[:-3]}')
+            if filename[:-3] == 'logging':
+                bot.load_extension(f'cogs.{filename[:-3]}', log_channel_id=1163150349511696484)  # Pass log_channel_id
+            else:
+                bot.load_extension(f'cogs.{filename[:-3]}')
 
 @bot.event
 async def on_ready():
-    print(f'Logged in as {bot.user.name} ({bot.user.id}')
+    print(f'Logged in as {bot.user.name} ({bot.user.id})')
     load_extensions()  # Load all extensions (cogs)
 
-    # Set the log_channel_id to the desired channel ID
-    log_channel_id = 1163150349511696484  # Replace with the actual channel ID
+    # Replace this with your channel ID
+    your_channel_id = 1163150349511696484
 
-    channel = bot.get_channel(log_channel_id)
+    channel = bot.get_channel(your_channel_id)
     if channel:
         await channel.send("Bot is online and ready for action!")
 
