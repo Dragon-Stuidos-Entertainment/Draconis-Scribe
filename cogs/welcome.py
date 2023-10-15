@@ -16,7 +16,10 @@ class Welcome(commands.Cog):
         if channel:
             # Create an embed for the welcome message
             embed = discord.Embed(color=discord.Color(0x00FF00))  # Green color for transmission
-            embed.set_thumbnail(url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLg5IvbPpE5enQ-696wFW74R3pUfZw-Mp-yUyPk6vaGw&s")
+
+            # Set the user's profile picture as the thumbnail
+            embed.set_thumbnail(url=member.avatar_url)
+
             embed.set_author(name="Office of Naval Intelligence", icon_url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLg5IvbPpE5enQ-696wFW74R3pUfZw-Mp-yUyPk6vaGw&s")
             embed.description = f"Transmission incoming...\n\n**Welcome, {member.mention}!**\n\nThank you for joining our server. Make sure you fill out an Application, to enlist with ONI. To do so, go to the {channel_to_read} channel and read the instructions on how to apply."
 
