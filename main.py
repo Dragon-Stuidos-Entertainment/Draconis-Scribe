@@ -22,7 +22,7 @@ async def on_ready():
     load_extensions()  # Load all extensions (cogs)
     
     # Replace this with your channel ID
-    your_channel_id = 1234567890
+    your_channel_id = 1162892621895696394
     
     channel = bot.get_channel(your_channel_id)
     if channel:
@@ -31,7 +31,7 @@ async def on_ready():
 @bot.event
 async def on_disconnect():
     # Replace this with your channel ID
-    your_channel_id = 1234567890
+    your_channel_id = 1162892621895696394
     
     channel = bot.get_channel(your_channel_id)
     if channel:
