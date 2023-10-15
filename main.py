@@ -1,28 +1,49 @@
+import os
+import discord
+from discord.ext import commands
+import asyncio
+
+intents = discord.Intents.default()
+intents.typing = False
+intents.presences = False
+intents.members = True
+intents.message_content = True
+bot = commands.Bot(command_prefix='!', intents=intents)
+
+# Your event decorators go here
 @bot.event
 async def on_ready():
     print(f'Logged in as {bot.user.name} ({bot.user.id})')
     load_extensions()  # Load all extensions (cogs)
     
-    # Replace this with your server (guild) ID
-    your_guild_id = 1118420639947173959
+    # Replace this with your channel ID
+    your_channel_id = 1118420639947173959
     
-    guild = bot.get_guild(your_guild_id)
-    if guild:
-        # Replace this with your desired channel name
-        channel_name = "bot-status"
-        channel = discord.utils.get(guild.text_channels, name=channel_name)
-        if channel:
-            await channel.send("Authorization Granted Bot is online")
+    channel = bot.get_channel(your_channel_id)
+    if channel:
+        await channel.send("Bot is online and ready for action!")
 
 @bot.event
 async def on_disconnect():
-    # Replace this with your server (guild) ID
-    your_guild_id = 1118420639947173959
+    # Replace this with your channel ID
+    your_channel_id = 1118420639947173959
     
-    guild = bot.get_guild(your_guild_id)
-    if guild:
-        # Replace this with your desired channel name
-        channel_name = "bot-status"
-        channel = discord.utils.get(guild.text_channels, name=channel_name)
-        if channel:
-            await channel.send("Bot is undergoing maintenance and is now offline.")
+    channel = bot.get_channel(your_channel_id)
+    if channel:
+        await channel.send("Bot is undergoing maintenance and is now offline.")
+
+# Your other event functions and commands here
+
+# Load all extensions (cogs) from the "cogs" directory
+def load_extensions():
+    for filename in os.listdir('./cogs'):
+        if filename.endswith('.py'):
+            bot.load_extension(f'cogs.{filename[:-3]}')
+
+# Read the bot token from the environment variable
+BOT_TOKEN = os.getenv('DISCORD_BOT_TOKEN')
+
+if BOT_TOKEN is None:
+    raise ValueError("DISCORD_BOT_TOKEN environment variable is not set.")
+
+bot.run(BOT_TOKEN)
