@@ -53,30 +53,32 @@ class Utility(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @commands.command(name="whois")
-    async def whois(self, ctx, member: discord.Member):
-        """Display information about a specific user."""
-        user_status = str(member.status).capitalize()
-        user_roles = ", ".join([role.mention for role in member.roles if role != ctx.guild.default_role])
+  @commands.command(name="whois")
+async def whois(self, ctx, member: discord.Member):
+    """Display information about a specific user."""
+    user_status = str(member.status).capitalize()
+    user_roles = ", ".join([role.mention for role in member.roles if role != ctx.guild.default_role])
 
-        embed = discord.Embed(title=f"User Information: {member.name}", color=discord.Color.blue())
-        embed.set_thumbnail(url=member.avatar_url)
-        embed.add_field(name="User ID", value=member.id, inline=True)
-        embed.add_field(name="User Status", value=user_status, inline=True)
-        embed.add_field(name="Joined Server", value=member.joined_at.strftime("%Y-%m-%d %H:%M:%S"), inline=True)
-        embed.add_field(name="Registered", value=member.created_at.strftime("%Y-%m-d %H:%M:%S"), inline=True)
-        embed.add_field(name="Roles", value=user_roles, inline=False)
+    embed = discord.Embed(title=f"User Information: {member.name}", color=discord.Color.blue())
+    embed.set_thumbnail(url=member.avatar_url_as(static_format="png", size=1024))  # Specify format and size
+    embed.add_field(name="User ID", value=member.id, inline=True)
+    embed.add_field(name="User Status", value=user_status, inline=True)
+    embed.add_field(name="Joined Server", value=member.joined_at.strftime("%Y-%m-%d %H:%M:%S"), inline=True)
+    embed.add_field(name="Registered", value=member.created_at.strftime("%Y-%m-%d %H:%M:%S"), inline=True)
+    embed.add_field(name="Roles", value=user_roles, inline=False)
 
-        await ctx.send(embed=embed)
+    await ctx.send(embed=embed)
 
-    @commands.command(name="avatar")
-    async def avatar(self, ctx, member: discord.Member = None):
-        """Display a user's avatar."""
-        if not member:
-            member = ctx.author
+@commands.command(name="avatar")
+async def avatar(self, ctx, member: discord.Member = None):
+    """Display a user's avatar."""
+    if not member:
+        member = ctx.author
 
-        avatar_url = member.avatar_url
-        await ctx.send(avatar_url)
+    avatar_url = member.avatar_url_as(static_format="png", size=1024)  # You can specify format and size
+    await ctx.send(avatar_url)
+
+
 
 def setup(bot):
     bot.add_cog(Utility(bot))
