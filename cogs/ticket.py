@@ -29,9 +29,31 @@ class Ticket(commands.Cog):
 
         user_ticket = await category.create_text_channel(f"ticket-{ctx.author.id}", overwrites=overwrites)
 
+        # Send an initial message to the user
+        await user_ticket.send(f"Hello {ctx.author.mention}, an Officer will be with you shortly.")
+
         await ctx.send(f"Your support ticket has been created in {user_ticket.mention}. Please describe your issue.")
 
-    # You can add more commands for managing and interacting with tickets here
+    @commands.command(name="close_ticket")
+    async def close_ticket(self, ctx):
+        # Check if the user has a ticket
+        user_ticket = discord.utils.get(ctx.guild.text_channels, name=f"ticket-{ctx.author.id}")
+
+        if not user_ticket:
+            await ctx.send("You don't have an open ticket to close.")
+            return
+
+        # Send a copy of the closed ticket to an admin channel (replace with your channel ID)
+        admin_channel = ctx.guild.get_channel(1163145966682128486)  # Replace with your admin channel ID
+
+        if admin_channel:
+            await admin_channel.send(f"Closed Ticket - {user_ticket.name}")
+            async for message in user_ticket.history():
+                await admin_channel.send(f"{message.author.display_name}: {message.content}")
+
+        # Delete the user's ticket channel
+        await user_ticket.delete()
+        await ctx.send("Your ticket has been closed. If you have more questions, feel free to create a new one.")
 
 def setup(bot):
     bot.add_cog(Ticket(bot))
