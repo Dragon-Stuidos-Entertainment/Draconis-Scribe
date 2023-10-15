@@ -22,7 +22,7 @@ async def on_ready():
     load_extensions()  # Load all extensions (cogs)
     
     # Replace this with your channel ID
-    your_channel_id = 1162830886723657869
+    your_channel_id = 1162892621895696394
     
     channel = bot.get_channel(your_channel_id)
     if channel:
