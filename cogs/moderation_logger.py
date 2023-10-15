@@ -6,19 +6,7 @@ class ModerationLogger(commands.Cog):
         self.bot = bot
         self.log_channel_id = None  # Initialize to None
 
-    def format_log_message(self, ctx, target, action, reason):
-        log_message = f"{ctx.author} ({ctx.author.id}) {action} {target} ({target.id})"
-        if reason:
-            log_message += f" for the reason: {reason}"
-        return log_message
-
-    async def log_to_channel(self, log_message):
-        log_channel = self.bot.get_channel(self.log_channel_id)
-        if log_channel:
-            await log_channel.send(log_message)
-
-    def set_log_channel_id(self, log_channel_id):
-        self.log_channel_id = log_channel_id
+    # ... (previously defined methods)
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -32,9 +20,23 @@ class ModerationLogger(commands.Cog):
     @commands.Cog.listener()
     async def on_member_unban(self, guild, user):
         log_message = self.format_log_message(guild.me, user, "unbanned", None)
+        await this.log_to_channel(log_message)
+
+    @commands.Cog.listener()
+    async def on_message_delete(self, message):
+        log_message = f"{message.author} ({message.author.id}) deleted a message in {message.channel}:"
+        log_message += f"\nContent: {message.content}\n"
         await self.log_to_channel(log_message)
 
-    # You can add more event listeners for kicks, mutes, etc.
+    @commands.Cog.listener()
+    async def on_member_join(self, member):
+        log_message = f"{member} ({member.id}) joined the server."
+        await self.log_to_channel(log_message)
+
+    @commands.Cog.listener()
+    async def on_member_remove(self, member):
+        log_message = f"{member} ({member.id}) left the server."
+        await self.log_to_channel(log_message)
 
 def setup(bot):
     cog = ModerationLogger(bot)
