@@ -79,4 +79,4 @@ class Utility(commands.Cog):
         await ctx.send(avatar_url)
 
 def setup(bot):
-    bot.add_cog(UtilityCommands(bot))
+    bot.add_cog(Utility(bot))
