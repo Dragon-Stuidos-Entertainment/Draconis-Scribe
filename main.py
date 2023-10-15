@@ -17,7 +17,7 @@ async def on_ready():
 @bot.event
 async def on_disconnect():
     # Replace this with your server (guild) ID
-    your_guild_id = 123456789012345678
+    your_guild_id = 1118420639947173959
     
     guild = bot.get_guild(your_guild_id)
     if guild:
