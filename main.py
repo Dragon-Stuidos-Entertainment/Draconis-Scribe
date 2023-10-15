@@ -20,6 +20,8 @@ async def on_ready():
     print(f'Logged in as {bot.user.name} ({bot.user.id})')
     load_extensions()  # Load all extensions (cogs)
     
+    activity = discord.Activity(type=discord.ActivityType.playing, name="Usage: !help to find commands you are trying to use")
+    await bot.change_presence(status=discord.Status.online, activity=activity)
     # Replace this with your channel ID
     your_channel_id = 1162892621895696394
     
