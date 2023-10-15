@@ -64,7 +64,7 @@ class UtilityCommands(commands.Cog):
         embed.add_field(name="User ID", value=member.id, inline=True)
         embed.add_field(name="User Status", value=user_status, inline=True)
         embed.add_field(name="Joined Server", value=member.joined_at.strftime("%Y-%m-%d %H:%M:%S"), inline=True)
-        embed.add_field(name="Registered", value=member.created_at.strftime("%Y-%m-%d %H:%M:%S"), inline=True)
+        embed.add_field(name="Registered", value=member.created_at.strftime("%Y-%m-d %H:%M:%S"), inline=True)
         embed.add_field(name="Roles", value=user_roles, inline=False)
 
         await ctx.send(embed=embed)
@@ -75,9 +75,8 @@ class UtilityCommands(commands.Cog):
         if not member:
             member = ctx.author
 
-        await ctx.send(member.avatar_url)
-
-    # Add more utility commands here
+        avatar_url = member.avatar_url
+        await ctx.send(avatar_url)
 
 def setup(bot):
     bot.add_cog(UtilityCommands(bot))
