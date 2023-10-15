@@ -14,7 +14,11 @@ def load_extensions():
     for filename in os.listdir('./cogs'):
         if filename.endswith('.py'):
             if filename[:-3] == 'logging':
-                bot.load_extension(f'cogs.{filename[:-3]}', log_channel_id=1163150349511696484)  # Pass log_channel_id
+                # Set log_channel_id for the logging cog
+                logging_cog = bot.get_cog('ModerationLogger')
+                if logging_cog:
+                    logging_cog.set_log_channel_id(1163150349511696484)  # Pass log_channel_id
+                bot.load_extension(f'cogs.{filename[:-3]}')
             else:
                 bot.load_extension(f'cogs.{filename[:-3]}')
 
