@@ -2,6 +2,9 @@ import os
 import discord
 from discord.ext import commands
 
+# Define log_channel_id as a global variable
+log_channel_id = 1163150349511696484
+
 intents = discord.Intents.default()
 intents.typing = False
 intents.presences = False
@@ -13,24 +16,14 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 def load_extensions():
     for filename in os.listdir('./cogs'):
         if filename.endswith('.py'):
-            if filename[:-3] == 'logging':
-                # Set log_channel_id for the logging cog
-                logging_cog = bot.get_cog('ModerationLogger')
-                if logging_cog:
-                    logging_cog.set_log_channel_id(1163150349511696484)  # Pass log_channel_id
-                bot.load_extension(f'cogs.{filename[:-3]}')
-            else:
-                bot.load_extension(f'cogs.{filename[:-3]}')
+            bot.load_extension(f'cogs.{filename[:-3]}')  # Extensions won't accept log_channel_id
 
 @bot.event
 async def on_ready():
     print(f'Logged in as {bot.user.name} ({bot.user.id})')
     load_extensions()  # Load all extensions (cogs)
 
-    # Replace this with your channel ID
-    your_channel_id = 1163150349511696484
-
-    channel = bot.get_channel(your_channel_id)
+    channel = bot.get_channel(log_channel_id)
     if channel:
         await channel.send("Bot is online and ready for action!")
 
