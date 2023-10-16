@@ -11,7 +11,7 @@ class Moderation(commands.Cog):
             log_message = f"Moderator {ctx.author} used the '{command_name}' command on {target}."
             await log_channel.send(log_message)
 
-    def delete_command_message(self, ctx):
+    async def delete_command_message(self, ctx):
         try:
             await ctx.message.delete()
         except discord.Forbidden:
@@ -25,7 +25,7 @@ class Moderation(commands.Cog):
 
         # Log the command and delete it
         await self.log_moderator_command(ctx, "ban", user)
-        self.delete_command_message(ctx)
+        await self.delete_command_message(ctx)
 
     @commands.command(name="kick")
     @commands.has_permissions(kick_members=True)
@@ -35,7 +35,7 @@ class Moderation(commands.Cog):
 
         # Log the command and delete it
         await self.log_moderator_command(ctx, "kick", user)
-        self.delete_command_message(ctx)
+        await self.delete_command_message(ctx)
 
     @commands.command(name="mute")
     @commands.has_permissions(manage_roles=True)
@@ -50,7 +50,7 @@ class Moderation(commands.Cog):
 
         # Log the command and delete it
         await self.log_moderator_command(ctx, "mute", user)
-        self.delete_command_message(ctx)
+        await self.delete_command_message(ctx)
 
     @commands.command(name="unmute")
     @commands.has_permissions(manage_roles=True)
@@ -65,7 +65,7 @@ class Moderation(commands.Cog):
 
         # Log the command and delete it
         await self.log_moderator_command(ctx, "unmute", user)
-        self.delete_command_message(ctx)
+        await self.delete_command_message(ctx)
 
     @commands.command(name="warn")
     @commands.has_permissions(kick_members=True)
@@ -75,7 +75,7 @@ class Moderation(commands.Cog):
 
         # Log the command and delete it
         await self.log_moderator_command(ctx, "warn", user)
-        self.delete_command_message(ctx)
+        await self.delete_command_message(ctx)
 
     @commands.command(name="tempban")
     @commands.has_permissions(ban_members=True)
@@ -86,7 +86,7 @@ class Moderation(commands.Cog):
 
         # Log the command and delete it
         await self.log_moderator_command(ctx, "tempban", user)
-        self.delete_command_message(ctx)
+        await self.delete_command_message(ctx)
 
     @commands.command(name="tempmute")
     @commands.has_permissions(manage_roles=True)
@@ -105,7 +105,7 @@ class Moderation(commands.Cog):
 
         # Log the command and delete it
         await self.log_moderator_command(ctx, "tempmute", user)
-        self.delete_command_message(ctx)
+        await self.delete_command_message(ctx)
 
     @commands.command(name="unwarn")
     @commands.has_permissions(kick_members=True)
@@ -115,7 +115,7 @@ class Moderation(commands.Cog):
 
         # Log the command and delete it
         await self.log_moderator_command(ctx, "unwarn", user)
-        self.delete_command_message(ctx)
+        await self.delete_command_message(ctx)
 
     @commands.command()
     @commands.has_permissions(manage_messages=True)
@@ -125,7 +125,7 @@ class Moderation(commands.Cog):
 
         # Log the command and delete it
         await self.log_moderator_command(ctx, "clear", ctx.channel)
-        self.delete_command_message(ctx)
+        await self.delete_command_message(ctx)
 
     @commands.command()
     async def ping(self, ctx):
