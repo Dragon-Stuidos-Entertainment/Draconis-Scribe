@@ -2,9 +2,18 @@ import discord
 from discord.ext import commands
 
 class ModerationLogger(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot, log_channel_id):
         self.bot = bot
-        self.log_channel_id = None  # Initialize to None
+        self.log_channel_id = log_channel_id
+
+    def get_log_channel(self):
+        # Return the log channel from the provided ID
+        return self.bot.get_channel(self.log_channel_id)
+
+    async def log_to_channel(self, message):
+        log_channel = self.get_log_channel()
+        if log_channel:
+            await log_channel.send(message)
 
     # ... (previously defined methods)
 
@@ -20,7 +29,7 @@ class ModerationLogger(commands.Cog):
     @commands.Cog.listener()
     async def on_member_unban(self, guild, user):
         log_message = self.format_log_message(guild.me, user, "unbanned", None)
-        await this.log_to_channel(log_message)
+        await self.log_to_channel(log_message)
 
     @commands.Cog.listener()
     async def on_message_delete(self, message):
@@ -38,6 +47,4 @@ class ModerationLogger(commands.Cog):
         log_message = f"{member} ({member.id}) left the server."
         await self.log_to_channel(log_message)
 
-def setup(bot):
-    cog = ModerationLogger(bot)
-    bot.add_cog(cog)
+# Rest of your code
