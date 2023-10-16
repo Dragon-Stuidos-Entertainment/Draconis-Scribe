@@ -12,7 +12,7 @@ class AutoModeration(commands.Cog):
         self.bad_words = set()  # Store bad words in a set
 
         # Read bad words from the text file
-        with open("bad_words.txt", "r") as file:
+        with open("badwords/bad_words.txt", "r") as file:
             self.bad_words.update(word.strip() for word in file.readlines())
 
     # Function to check for bad words
