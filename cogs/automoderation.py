@@ -26,7 +26,7 @@ class AutoModeration(commands.Cog):
                     has_manage_roles_permission = any(role.permissions.manage_roles for role in user.roles)
                     
                     # Check if the user has the "Officer's" or "Enlisted NCO" roles
-                    has_officer_role = any(role.name == "Officer's" for role in user.roles)
+                    has_officer_role = any(role.name == "Officer's Core" for role in user.roles)
                     has_enlisted_nco_role = any(role.name == "Enlisted NCO" for role in user.roles)
 
                     # Apply the cooldown for specific roles
