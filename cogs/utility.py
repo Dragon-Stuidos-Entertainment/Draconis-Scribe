@@ -53,7 +53,7 @@ class Utility(commands.Cog):
 
         await ctx.send(embed=embed)
 
-  @commands.command(name="whois")
+@commands.command(name="whois")
 async def whois(self, ctx, member: discord.Member):
     """Display information about a specific user."""
     user_status = str(member.status).capitalize()
@@ -77,6 +77,8 @@ async def avatar(self, ctx, member: discord.Member = None):
 
     avatar_url = member.avatar_url_as(static_format="png", size=1024)  # You can specify format and size
     await ctx.send(avatar_url)
+
+
 
 
 
