@@ -36,7 +36,7 @@ class AutoModeration(commands.Cog):
                 # User is sending messages very quickly, consider additional actions
                 # You've already muted the user in this case, but you can add more actions if needed.
             
-        self.message_history[user.id] = message.created_at
+            self.message_history[user.id] = message.created_at
 
 def setup(bot):
     bot.add_cog(AutoModeration(bot))
