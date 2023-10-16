@@ -1,11 +1,9 @@
-# main.py
-import os
 import discord
 from discord.ext import commands
 from cogs.moderation_logger import ModerationLogger  # Import the ModerationLogger class
 
 # Define log_channel_id as a global variable
-log_channel_id = 1163150349511696484
+log_channel_id = 1163150349511696484  # Update this with your actual log channel ID
 
 intents = discord.Intents.default()
 intents.typing = False
@@ -13,9 +11,6 @@ intents.presences = False
 intents.members = True
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
-
-# Create an instance of ModerationLogger with the log_channel_id
-moderation_logger = ModerationLogger(bot, log_channel_id)
 
 # Load all extensions (cogs) from the "cogs" directory
 def load_extensions():
@@ -46,5 +41,9 @@ OPEN_API_KEY = os.getenv('API_KEY')
 
 if BOT_TOKEN is None:
     raise ValueError("DISCORD_BOT_TOKEN environment variable is not set.")
+
+# Add the ModerationLogger cog
+def setup(bot):
+    bot.add_cog(ModerationLogger(bot, log_channel_id))
 
 bot.run(BOT_TOKEN)
