@@ -7,9 +7,32 @@ from discord.ext import commands
 class AutoModeration(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.message_history = {}
+        self.message_history = []
+        self.bad_words = set()  # Store bad words in a set
 
-    # ... (other functions and event listeners)
+        # Read bad words from the text file
+        with open("bad_words.txt", "r") as file:
+            self.bad_words.update(word.strip() for word in file.readlines())
+
+    # Function to check for bad words
+    async def check_bad_words(self, message):
+        # Convert the message content to lowercase for case-insensitive matching
+        content = message.content.lower()
+
+        # Check if the message contains any bad words
+        for word in self.bad_words:
+            if word in content:
+                # Delete the message with a warning
+                await message.delete()
+
+                # Warn the user
+                warning_message = f"{message.author.mention}, please refrain from using bad language."
+                await message.channel.send(warning_message)
+
+                # You can also send a notification to your moderation log channel
+                await self.send_spam_notification(message)
+
+                return
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -18,24 +41,22 @@ class AutoModeration(commands.Cog):
 
         user = message.author
 
+        # Check for bad words
+        await self.check_bad_words(message)
+
         if user.id in self.message_history:
             time_difference = (message.created_at - self.message_history[user.id]).seconds
 
             if time_difference < 5:
                 # User is sending messages too quickly
                 if time_difference < 3:
-                    # Check if the user has the "manage roles" permission
                     has_manage_roles_permission = any(role.permissions.manage_roles for role in user.roles)
-                    
-                    # Check if the user has the "Officer's" or "Enlisted NCO" roles
                     has_officer_role = any(role.name == "Officer's Core" for role in user.roles)
                     has_enlisted_nco_role = any(role.name == "Enlisted NCO" for role in user.roles)
 
-                    # Apply the cooldown for specific roles
                     if not (has_manage_roles_permission or has_officer_role or has_enlisted_nco_role):
                         await self.trigger_moderation_actions(message)
 
-                # Update the message history
                 self.message_history[user.id] = message.created_at
 
     async def send_spam_notification(self, message):
