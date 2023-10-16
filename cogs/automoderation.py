@@ -26,7 +26,7 @@ class AutoModeration(commands.Cog):
                         await message.channel.send(f"{user.mention} has been muted for spamming.")
                     else:
                         await message.channel.send("Muted role not found. Please create one.")
-
+                
                 # Delete the spammy message
                 await message.delete()
                 # Warn the user
@@ -35,8 +35,8 @@ class AutoModeration(commands.Cog):
             elif time_difference < 3:
                 # User is sending messages very quickly, consider additional actions
                 # You've already muted the user in this case, but you can add more actions if needed.
-
-            self.message_history[user.id] = message.created_at
+            
+        self.message_history[user.id] = message.created_at
 
 def setup(bot):
     bot.add_cog(AutoModeration(bot))
