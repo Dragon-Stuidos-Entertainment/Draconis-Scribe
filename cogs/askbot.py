@@ -5,7 +5,7 @@ import requests
 class Askbot(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.api_key = "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"  # Replace with your OpenAI API key
+        self.api_key = "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"  # Replace with your OpenAI API key
 
     @commands.command()
     async def askbot(self, ctx, *, question):
