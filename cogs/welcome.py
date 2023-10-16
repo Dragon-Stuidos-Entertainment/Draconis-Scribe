@@ -21,7 +21,7 @@ class Welcome(commands.Cog):
             embed.set_thumbnail(url=member.avatar_url)
 
             embed.set_author(name="Office of Naval Intelligence", icon_url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLg5IvbPpE5enQ-696wFW74R3pUfZw-Mp-yUyPk6vaGw&s")
-            embed.description = f"Transmission incoming...\n\n**Welcome, {member.mention}!**\n\nThank you for joining our server. Make sure you fill out an Application, to enlist with ONI. To do so, go to the {channel_to_read} channel and read the instructions on how to apply."
+            embed.description = f"Transmission incoming...\n\n**Welcome, {member.mention}!**\n\nThank you for joining our server. Make sure you fill out an Application, to enlist with ONI. To do so, go to the {channel_to_read} channel and read the instructions on how to apply.\n\n We look forward to seeing you on the field."
 
             await channel.send(embed=embed)
 
