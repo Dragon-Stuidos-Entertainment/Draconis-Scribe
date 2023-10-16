@@ -1,3 +1,4 @@
+# main.py
 import os
 import discord
 from discord.ext import commands
@@ -13,6 +14,8 @@ intents.members = True
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
+# Create an instance of ModerationLogger with the log_channel_id
+moderation_logger = ModerationLogger(bot, log_channel_id)
 
 # Load all extensions (cogs) from the "cogs" directory
 def load_extensions():
@@ -27,7 +30,7 @@ def load_extensions():
 
 @bot.event
 async def on_ready():
-    print(f'Logged in as {bot.user.name} ({bot.user.id})')
+    print(f'Logged in as {bot.user.name} ({bot.user.id}')
     load_extensions()  # Load all extensions (cogs)
 
     channel = bot.get_channel(log_channel_id)
