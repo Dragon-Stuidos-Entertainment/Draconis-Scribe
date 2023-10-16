@@ -9,6 +9,8 @@ class AutoModeration(commands.Cog):
         self.bot = bot
         self.message_history = {}
 
+    # ... (other functions and event listeners)
+
     @commands.Cog.listener()
     async def on_message(self, message):
         if message.author == self.bot.user:
@@ -36,6 +38,12 @@ class AutoModeration(commands.Cog):
                 # Update the message history
                 self.message_history[user.id] = message.created_at
 
+    async def send_spam_notification(self, message):
+        log_channel = self.bot.get_channel(1163150349511696484)  # Change the channel ID as needed
+        if log_channel:
+            notification_message = f"Spam Message Notification: {message.author} ({message.author.id}) sent a spam message in {message.channel}:\nContent: {message.content}"
+            await log_channel.send(notification_message)
+
     async def trigger_moderation_actions(self, message):
         user = message.author
 
@@ -44,9 +52,10 @@ class AutoModeration(commands.Cog):
         if muted_role:
             await message.author.add_roles(muted_role)
             await message.channel.send(f"{user.mention} has been muted for spamming.")
+            await self.send_spam_notification(message)  # Send the spam notification
         else:
             await message.channel.send("Muted role not found. Please create one.")
-        
+
         # Delete the spammy message
         await message.delete()
 
