@@ -48,3 +48,6 @@ class ModerationLogger(commands.Cog):
         await self.log_to_channel(log_message)
 
 # Rest of your code
+
+def setup(bot):
+    bot.add_cog(ModerationLogger(bot))
