@@ -1,5 +1,4 @@
 import discord
-import io
 from discord.ext import commands
 
 # Define a decorator for the cooldown
@@ -9,30 +8,21 @@ class AutoModeration(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.message_history = []
-        self.bad_words = set()  # Store bad words in a set
 
-        # Read bad words from the text file
-        with open("badwords/bad_words.txt", "r") as file:
-            self.bad_words.update(word.strip() for word in file.readlines())
+    # ... (other functions and event listeners)
 
-    # Function to check for bad words
     async def check_bad_words(self, message):
+        # List of bad words to check
+        bad_words = ["Ginger", "Nigger", "Nigga", "Niglet", "Chink",]  # Add your bad words
+
         # Convert the message content to lowercase for case-insensitive matching
         content = message.content.lower()
 
         # Check if the message contains any bad words
-        for word in self.bad_words:
+        for word in bad_words:
             if word in content:
-                # Delete the message with a warning
-                await message.delete()
-
-                # Warn the user
-                warning_message = f"{message.author.mention}, please refrain from using bad language."
-                await message.channel.send(warning_message)
-
-                # You can also send a notification to your moderation log channel
-                await self.send_spam_notification(message)
-
+                # If a bad word is found, take moderation actions
+                await self.trigger_moderation_actions(message)
                 return
 
     @commands.Cog.listener()
