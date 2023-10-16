@@ -14,7 +14,7 @@ class Askbot(commands.Cog):
 
         # Set up the headers for the API request
         headers = {
-            "Authorization": f"Blackbox {self.api_key}",
+            "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json",
         }
 
