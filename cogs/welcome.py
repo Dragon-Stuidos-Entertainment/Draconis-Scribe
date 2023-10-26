@@ -7,7 +7,7 @@ class Welcome(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        channel_id = 1118782771821826100  # Replace with the actual channel ID where you want to send the welcome message
+        channel_id = 1166607721517289562   # Replace with the actual channel ID where you want to send the welcome message
 
         channel_to_read = "#enlist-now"  # Replace with the actual channel name you want to mention
 
