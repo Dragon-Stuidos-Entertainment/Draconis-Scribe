@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 import asyncio
 
-YOUR_ENLISTMENT_ID = 1162892793560178689
+YOUR_ENLISTMENT_ID = 1166772997017837618
 
 class Enlistment(commands.Cog):
     def __init__(self, bot):
