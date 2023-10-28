@@ -12,14 +12,14 @@ class LOA(commands.Cog):
         self.loa_requests = {}
 
     @commands.command(name="loa")
-    async def request_loa(self, ctx, *, reason):
+    async def request_loa(self, ctx, length, *, reason):
         # Check if the user has an existing LOA request
         if ctx.author.id in self.loa_requests:
             await ctx.send("You already have an existing LOA request in progress.")
             return
 
         # Create a new LOA request
-        loa_request = {"reason": reason, "status": "Pending", "approver": None}
+        loa_request = {"reason": reason, "length": length, "status": "Pending", "approver": None}
 
         # Send the LOA request to a specific channel for review
         loa_channel = self.bot.get_channel(YOUR_LOA_CHANNEL_ID)
@@ -28,6 +28,7 @@ class LOA(commands.Cog):
             embed = discord.Embed(title="Leave of Absence Request", color=discord.Color.blue())
             embed.add_field(name="User", value=ctx.author.mention, inline=False)
             embed.add_field(name="Reason", value=reason, inline=False)
+            embed.add_field(name="Length", value=length, inline=False)
 
             # Send the request as an embed
             message = await loa_channel.send(embed=embed)
@@ -58,6 +59,16 @@ class LOA(commands.Cog):
                 await ctx.send("You took too long to react. The LOA request status has been left pending.")
         else:
             await ctx.send("LOA channel not found. Please contact the server administrator.")
+
+    @commands.command(name="cancelloa")
+    async def cancel_loa(self, ctx):
+        # Check if the user has an existing LOA request to cancel
+        if ctx.author.id in self.loa_requests:
+            # Remove the LOA request
+            del self.loa_requests[ctx.author.id]
+            await ctx.send("Your LOA request has been canceled.")
+        else:
+            await ctx.send("You don't have an existing LOA request to cancel.")
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
