@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 import asyncio
 
-YOUR_LOA_CHANNEL_ID = 1234567890  # Replace with the actual channel ID where LOA requests should be sent
+YOUR_LOA_CHANNEL_ID = 1167870276856455228  # Replace with the actual channel ID where LOA requests should be sent
 
 class LOA(commands.Cog):
     def __init__(self, bot):
