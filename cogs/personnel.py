@@ -13,7 +13,7 @@ class Personnel(commands.Cog):
     @commands.command()
     async def searchrecord(self, ctx, name):
         # Check if the user has the "TopSecret" role
-        if "TopSecret" in [role.name for role in ctx.author.roles]:
+        if "Top Secret" in [role.name for role in ctx.author.roles]:
             matching_records = []
 
             # Search for records with a matching name
