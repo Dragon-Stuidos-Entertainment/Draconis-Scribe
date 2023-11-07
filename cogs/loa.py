@@ -60,6 +60,31 @@ class LOA(commands.Cog):
         else:
             await ctx.send("LOA channel not found. Please contact the server administrator.")
 
+    @commands.command(name="cancelloa")
+    async def cancel_loa(self, ctx):
+        # Check if the user has an existing LOA request
+        if ctx.author.id in self.loa_requests:
+            loa_request = self.loa_requests[ctx.author.id]
+
+            if loa_request["status"] == "Pending":
+                # Delete the LOA request message
+                loa_channel = self.bot.get_channel(YOUR_LOA_CHANNEL_ID)
+                if loa_channel:
+                    try:
+                        message = await loa_channel.fetch_message(loa_request["message"])
+                        await message.delete()
+                    except discord.NotFound:
+                        pass  # Message doesn't exist
+
+                # Remove the LOA request
+                del self.loa_requests[ctx.author.id]
+
+                await ctx.send("Your pending LOA request has been canceled.")
+            else:
+                await ctx.send("You cannot cancel a LOA request that has already been approved or denied.")
+        else:
+            await ctx.send("You don't have an existing LOA request to cancel.")
+
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
         if user == self.bot.user:
