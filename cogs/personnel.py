@@ -3,7 +3,7 @@ from discord.ext import commands
 import json
 
 # Read the JSON data
-with open('json/personnel_records.json', 'r') as file:
+with open('json/personnel/personnel_records.json', 'r') as file:
     personnel_data = json.load(file)
 
 class Personnel(commands.Cog):
