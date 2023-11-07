@@ -1,0 +1,27 @@
+{
+    "personnel_records": [
+        {
+            "id": 1,
+            "name": "Arielle Ava",
+            "position": "CINCONI",
+            "department": "Core - 5",
+            "email": "ArielleAvaOni@gmail.com",
+            "rank": "O-9 Admiral",
+            "gamertag": "Admiral Ava",
+            "mid": "02565-89647-AA",
+            "YOS": 10
+        },
+        
+        {
+            "id": 2,
+            "name": "D. Jon",
+            "position": "Director",
+            "department": "Section 0",
+            "email": "REDACTED",
+            "rank": "0-8 Vice Admiral",
+            "gamertag": "Pylectic",
+            "mid": "76547-23942-DJ",
+            "YOS": "N/A"
+        }
+    ]
+}
