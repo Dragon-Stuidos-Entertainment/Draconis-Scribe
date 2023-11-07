@@ -12,7 +12,7 @@ class LOA(commands.Cog):
         self.loa_requests = {}
 
     @commands.command(name="loa")
-    async def request_loa(self, ctx, *, reason):
+    async def request_loa(self, ctx, length, *, reason):
         # Check if the user has an existing LOA request
         if ctx.author.id in self.loa_requests:
             await ctx.send("You already have an existing LOA request in progress.")
