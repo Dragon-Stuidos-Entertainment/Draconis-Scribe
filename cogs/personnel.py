@@ -36,5 +36,6 @@ class Personnel(commands.Cog):
             await ctx.send("You do not have the required clearance to access personnel records.")
 
 # Load the cog
-bot.add_cog(Personnel(bot))
+def setup(bot):
+    bot.add_cog(Personnel(bot))
 
