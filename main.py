@@ -1,7 +1,7 @@
 import dotenv
 import discord
 from discord.ext import commands
-
+log_channel_id= "1192692555859624097"
 
 intents = discord.Intents.default()
 intents.typing = False
