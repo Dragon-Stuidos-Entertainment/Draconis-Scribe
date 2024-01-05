@@ -1,2 +1,2 @@
 dotenv
-py-cord
+py-cord==2.4
