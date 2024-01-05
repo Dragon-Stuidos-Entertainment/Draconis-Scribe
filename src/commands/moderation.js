@@ -1,19 +1,13 @@
 // commands/moderation.js
-const checkPermissions = (message, requiredPermission) => {
-    // Check if the user has the required permission
-    if (!message.member.permissions.has(requiredPermission)) {
-        return message.reply(`You do not have the required \`${requiredPermission}\` permission to use this command.`);
-    }
-    return true;
-};
-
 module.exports = [
     {
         name: 'kick',
         description: 'Kick a user from the server',
         execute(message, args) {
             // Check if the user has the 'KICK_MEMBERS' permission
-            if (!checkPermissions(message, 'KICK_MEMBERS')) return;
+            if (!message.member.permissions.has('KICK_MEMBERS')) {
+                return message.reply('You do not have permission to use this command.');
+            }
 
             // Mention the user to be kicked
             const targetUser = message.mentions.users.first();
@@ -42,7 +36,9 @@ module.exports = [
         description: 'Ban a user from the server',
         execute(message, args) {
             // Check if the user has the 'BAN_MEMBERS' permission
-            if (!checkPermissions(message, 'BAN_MEMBERS')) return;
+            if (!message.member.permissions.has('BAN_MEMBERS')) {
+                return message.reply('You do not have permission to use this command.');
+            }
 
             // Mention the user to be banned
             const targetUser = message.mentions.users.first();
