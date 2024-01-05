@@ -1,10 +1,10 @@
 import os
-from dotenv import load_env
+from dotenv import load_dotenv
 import discord
 from discord.ext import commands
 from cogs.moderation_logger import ModerationLogger  # Import the ModerationLogger class
 
-load_env()
+load_dotenv()
 # Define log_channel_id as a global variable
 log_channel_id = 1163150349511696484  # Update this with your actual log channel ID
 
