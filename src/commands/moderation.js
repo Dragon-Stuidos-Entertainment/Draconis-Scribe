@@ -62,16 +62,20 @@ module.exports = [
                 });
         },
     },
-    {
-        name: 'ping',
-        description: 'Check the bot\'s response time',
-        execute(message, args) {
-            // Calculate the latency between sending a message and editing it
-            const latency = Date.now() - message.createdTimestamp;
-            
-            // Send a message with the calculated latency
-            message.reply(`Pong! Latency is ${latency}ms.`);
-        },
+   // commands/moderation.js
+{
+    name: 'ping',
+    description: 'Check the bot\'s response time',
+    execute(message, args) {
+        console.log('Ping command triggered.'); // Add this line for debugging
+
+        // Calculate the latency between sending a message and editing it
+        const latency = Date.now() - message.createdTimestamp;
+        
+        // Send a message with the calculated latency
+        message.reply(`Pong! Latency is ${latency}ms.`);
     },
+},
+
     // Add more moderation commands as needed
 ];
