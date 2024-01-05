@@ -36,7 +36,7 @@ async def on_ready():
 # Your other event functions and commands here
 
 # Read the bot token from the environment variable
-BOT_TOKEN = os.getenv('DISCORD_BOT_TOKEN')
+BOT_TOKEN = os.getenv('BOT_TOKEN')
 
 OPEN_API_KEY = os.getenv('API_KEY')
 
