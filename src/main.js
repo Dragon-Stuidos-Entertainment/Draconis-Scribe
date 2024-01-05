@@ -2,6 +2,7 @@
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
 require('dotenv').config(); // Load environment variables from .env file
 const fs = require('fs');
+const path = require('path');
 
 // Create a new Discord client with required intents
 const client = new Client({
@@ -16,12 +17,16 @@ const client = new Client({
 // Create a collection to store commands
 client.commands = new Collection();
 
-// Read all command files
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+// Get the absolute path to the 'commands' directory
+const commandsPath = path.join(__dirname, 'commands');
 
-// Load each command
+// Read all command files dynamically
+const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+
+// Load each command dynamically
 for (const file of commandFiles) {
-    const command = require(`./commands/${file}`);
+    const commandPath = path.join(commandsPath, file);
+    const command = require(commandPath);
     client.commands.set(command.name, command);
 }
 
