@@ -1,10 +1,8 @@
 import os
-from dotenv import load_dotenv
 import discord
 from discord.ext import commands
 from cogs.moderation_logger import ModerationLogger  # Import the ModerationLogger class
 
-load_dotenv()
 # Define log_channel_id as a global variable
 log_channel_id = 1163150349511696484  # Update this with your actual log channel ID
 
@@ -43,7 +41,7 @@ BOT_TOKEN = os.getenv('BOT_TOKEN')
 OPEN_API_KEY = os.getenv('API_KEY')
 
 if BOT_TOKEN is None:
-    raise ValueError("DISCORD_BOT_TOKEN environment variable is not set.")
+    raise ValueError("BOT_TOKEN environment variable is not set.")
 
 # Add the ModerationLogger cog
 def setup(bot):
