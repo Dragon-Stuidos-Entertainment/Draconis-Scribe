@@ -1,6 +1,7 @@
 // Import the discord.js module
-const { Client, GatewayIntentBits } = require('discord.js');
+const { Client, GatewayIntentBits, Collection } = require('discord.js');
 require('dotenv').config(); // Load environment variables from .env file
+const fs = require('fs');
 
 // Create a new Discord client with required intents
 const client = new Client({
@@ -11,6 +12,18 @@ const client = new Client({
         GatewayIntentBits.GuildMembers
     ]
 });
+
+// Create a collection to store commands
+client.commands = new Collection();
+
+// Read all command files
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+
+// Load each command
+for (const file of commandFiles) {
+    const command = require(`./commands/${file}`);
+    client.commands.set(command.name, command);
+}
 
 // Set up an event listener for when the bot is ready
 client.once('ready', () => {
@@ -23,9 +36,24 @@ client.on('messageCreate', (message) => {
     if (message.author.bot) return;
 
     // Check if the message starts with the command prefix (e.g., !)
-    if (message.content.startsWith('!hello')) {
-        // Reply with a greeting
-        message.reply('Hello, ' + message.author.username + '!');
+    if (!message.content.startsWith('!')) return;
+
+    // Extract the command name and arguments
+    const args = message.content.slice('!'.length).split(/ +/);
+    const commandName = args.shift().toLowerCase();
+
+    // Get the command from the collection
+    const command = client.commands.get(commandName);
+
+    // If the command doesn't exist, do nothing
+    if (!command) return;
+
+    // Execute the command
+    try {
+        command.execute(message, args);
+    } catch (error) {
+        console.error(error);
+        message.reply('There was an error executing the command.');
     }
 });
 
