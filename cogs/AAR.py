@@ -16,17 +16,15 @@ class AAR(commands.Cog):
             "TOA: **TYPE OF ACTIVITY**",
             "POC: **PERSON OF CHARGE**",
             "OUT: **VICTORY/DEFEAT/TIE**",
-            "\n__Personnel Attending__ – # of People",
-            "\nOpposing Forces",
-            "\nLeft Early (^)",
-            "\nJoined Late (!)",
-            "\n__Event Log__ [IF RAID WRITE A SUMMARY BELOW, IF NOT DELETE THIS BRACKETED MESSAGE]",
-            "Game 1: The Pit CTF [5-2] Texas",
-            "Game 2: Sanctuary Slayer [50-47] BLAM",
-            "Game 3: Nexus KOTH [250-120] Texas",
-            "\n__Event Comments__",
+            "\n__Personnel Attending__: – # of People",
+            "\nOpposing Forces:",
+            "\nLeft Early (^):",
+            "\nJoined Late (!):",
+            "\n__Event Log__: ",
+            "\n__Event Comments__:",
+            "\n**__What can be improved?__**",
+            "\n**__MVP__:"
             "+ Good Communication",
-            "+ Good Rotations",
             "– Complaining About Nades"
         ]
 
