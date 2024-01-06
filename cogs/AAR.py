@@ -36,7 +36,7 @@ class AAR(commands.Cog):
             message = await ctx.send(question)
             try:
                 response = await self.bot.wait_for('message', timeout=300, check=lambda m: m.author == ctx.author and m.channel == ctx.channel)
-                responses.append(response.content)
+                responses.append((question, response.content))
                 await message.delete()
             except discord.errors.NotFound:
                 # Message may have been deleted by the user, ignore the error
@@ -45,12 +45,11 @@ class AAR(commands.Cog):
                 await ctx.send("You took too long to respond. The AAR submission process has been canceled.")
                 return
 
-        # Combine the responses into a formatted AAR
-        formatted_aar = "\n".join(responses)
-
         # Create an embed for the AAR
         embed = discord.Embed(title="After Action Report", color=discord.Color.blue())
-        embed.description = formatted_aar
+
+        for question, answer in responses:
+            embed.add_field(name=question, value=answer, inline=False)
 
         # Send the embed to the specified channel
         aar_channel = self.bot.get_channel(YOUR_AAR_CHANNEL_ID)
