@@ -38,8 +38,6 @@ async def on_ready():
 # Read the bot token from the environment variable
 BOT_TOKEN = os.getenv('DISCORD_BOT_TOKEN')
 
-OPEN_API_KEY = os.getenv('API_KEY')
-
 if BOT_TOKEN is None:
     raise ValueError("DISCORD_BOT_TOKEN environment variable is not set.")
 
