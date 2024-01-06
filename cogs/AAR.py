@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-YOUR_AAR_CHANNEL_ID = 123456789  # Replace with the actual channel ID where AAR reports should be sent
+YOUR_AAR_CHANNEL_ID = 1188702656022184046  # Replace with the actual channel ID where AAR reports should be sent
 
 class AAR(commands.Cog):
     def __init__(self, bot):
