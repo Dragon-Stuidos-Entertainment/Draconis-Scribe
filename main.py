@@ -1,7 +1,6 @@
 import os
 import discord
 from discord.ext import commands
-from cogs.moderation_logger import ModerationLogger  # Import the ModerationLogger class
 from dotenv import load_dotenv
 
 load_dotenv()
