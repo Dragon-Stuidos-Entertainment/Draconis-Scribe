@@ -48,10 +48,14 @@ class AAR(commands.Cog):
         # Combine the responses into a formatted AAR
         formatted_aar = "\n".join(responses)
 
-        # Send the formatted AAR to the specified channel
+        # Create an embed for the AAR
+        embed = discord.Embed(title="After Action Report", color=discord.Color.blue())
+        embed.description = formatted_aar
+
+        # Send the embed to the specified channel
         aar_channel = self.bot.get_channel(YOUR_AAR_CHANNEL_ID)
         if aar_channel:
-            await aar_channel.send(formatted_aar)
+            await aar_channel.send(embed=embed)
             await ctx.send("Your After Action Report has been submitted successfully.")
         else:
             await ctx.send("AAR channel not found. Please contact the server administrator.")
