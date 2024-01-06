@@ -43,8 +43,4 @@ BOT_TOKEN = os.getenv('DISCORD_BOT_TOKEN')
 if BOT_TOKEN is None:
     raise ValueError("DISCORD_BOT_TOKEN environment variable is not set.")
 
-# Add the ModerationLogger cog
-def setup(bot):
-    bot.add_cog(ModerationLogger(bot, log_channel_id))
-
 bot.run(BOT_TOKEN)
