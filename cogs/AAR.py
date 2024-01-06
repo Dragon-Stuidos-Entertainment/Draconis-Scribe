@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-
+YOUR_AAR_CHANNEL_ID= 1188702656022184046
 class AAR(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
