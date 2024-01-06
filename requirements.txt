@@ -1,2 +1,2 @@
-discord.js
-dotenv
+discord.py
+py-cord
