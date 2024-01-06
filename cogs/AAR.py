@@ -1,85 +1,58 @@
 import discord
 from discord.ext import commands
-YOUR_AAR_CHANNEL_ID= 1188702656022184046
+
+YOUR_AAR_CHANNEL_ID = 123456789  # Replace with the actual channel ID where AAR reports should be sent
+
 class AAR(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.aar_reports = {}  # Dictionary to store AAR reports
 
     @commands.command(name="submitaar")
     async def submit_aar(self, ctx):
-        def check_author(message):
-            return message.author == ctx.author and message.channel == ctx.channel
+        # Ask each portion of the AAR and delete the question once answered
+        questions = [
+            "After Action Report – **CLAN V. CLAN**",
+            "DOA: **MONTH/DAY/YEAR**",
+            "TOA: **TYPE OF ACTIVITY**",
+            "POC: **PERSON OF CHARGE**",
+            "OUT: **VICTORY/DEFEAT/TIE**",
+            "\n__Personnel Attending__ – # of People",
+            "\nOpposing Forces",
+            "\nLeft Early (^)",
+            "\nJoined Late (!)",
+            "\n__Event Log__ [IF RAID WRITE A SUMMARY BELOW, IF NOT DELETE THIS BRACKETED MESSAGE]",
+            "Game 1: The Pit CTF [5-2] Texas",
+            "Game 2: Sanctuary Slayer [50-47] BLAM",
+            "Game 3: Nexus KOTH [250-120] Texas",
+            "\n__Event Comments__",
+            "+ Good Communication",
+            "+ Good Rotations",
+            "– Complaining About Nades"
+        ]
 
-        # Ask for DOA
-        await ctx.send("Enter the Date of Action (DOA) in the format `MONTH/DAY/YEAR`:")
-        doa_message = await self.bot.wait_for('message', check=check_author)
-        doa = doa_message.content
-        await doa_message.delete()
+        responses = []
 
-        # Ask for TOA
-        await ctx.send("Enter the Type of Activity (TOA):")
-        toa_message = await self.bot.wait_for('message', check=check_author)
-        toa = toa_message.content
-        await toa_message.delete()
+        for question in questions:
+            message = await ctx.send(question)
+            try:
+                response = await self.bot.wait_for('message', timeout=300, check=lambda m: m.author == ctx.author and m.channel == ctx.channel)
+                responses.append(response.content)
+                await message.delete()
+            except discord.errors.NotFound:
+                # Message may have been deleted by the user, ignore the error
+                pass
+            except asyncio.TimeoutError:
+                await ctx.send("You took too long to respond. The AAR submission process has been canceled.")
+                return
 
-        # Ask for POC
-        await ctx.send("Enter the Person of Charge (POC):")
-        poc_message = await self.bot.wait_for('message', check=check_author)
-        poc = poc_message.content
-        await poc_message.delete()
+        # Combine the responses into a formatted AAR
+        formatted_aar = "\n".join(responses)
 
-        # Ask for OUT
-        await ctx.send("Enter the Outcome (OUT - Victory/Defeat/Tie):")
-        out_message = await self.bot.wait_for('message', check=check_author)
-        out = out_message.content
-        await out_message.delete()
-
-        # Ask for Personnel Attending
-        await ctx.send("Enter the personnel attending in the format `CLAN'S EMOJI @Name`, one per line. Type `done` when finished:")
-        personnel_lines = []
-        while True:
-            personnel_message = await self.bot.wait_for('message', check=check_author)
-            if personnel_message.content.lower() == 'done':
-                break
-            personnel_lines.append(personnel_message.content)
-            await personnel_message.delete()
-
-        # Ask for Opposing Forces
-        await ctx.send("Enter the opposing forces in the format `CLAN'S EMOJI Example Name`, one per line. Type `done` when finished:")
-        forces_lines = []
-        while True:
-            forces_message = await self.bot.wait_for('message', check=check_author)
-            if forces_message.content.lower() == 'done':
-                break
-            forces_lines.append(forces_message.content)
-            await forces_message.delete()
-
-        # Create an embed for the AAR report
-        embed = discord.Embed(title="After Action Report", color=discord.Color.dark_green())
-        embed.add_field(name="DOA", value=doa, inline=True)
-        embed.add_field(name="TOA", value=toa, inline=True)
-        embed.add_field(name="POC", value=poc, inline=True)
-        embed.add_field(name="OUT", value=out, inline=True)
-
-        # Add personnel attending to the embed
-        embed.add_field(name="Personnel Attending", value="\n".join(personnel_lines), inline=False)
-
-        # Add opposing forces to the embed
-        embed.add_field(name="Opposing Forces", value="\n".join(forces_lines), inline=False)
-
-        # Send the AAR report as an embed
-        aar_channel = self.bot.get_channel(YOUR_AAR_CHANNEL_ID)  # Replace with the actual channel ID
+        # Send the formatted AAR to the specified channel
+        aar_channel = self.bot.get_channel(YOUR_AAR_CHANNEL_ID)
         if aar_channel:
-            message = await aar_channel.send(embed=embed)
-            self.aar_reports[ctx.author.id] = {"message_id": message.id}
-
-            # Add reactions for additional comments
-            await message.add_reaction("👍")  # Positive
-            await message.add_reaction("👎")  # Negative
-            await message.add_reaction("❓")  # Questions
-
-            await ctx.send("AAR report submitted successfully.")
+            await aar_channel.send(formatted_aar)
+            await ctx.send("Your After Action Report has been submitted successfully.")
         else:
             await ctx.send("AAR channel not found. Please contact the server administrator.")
 
