@@ -37,9 +37,9 @@ async def on_ready():
 # Your other event functions and commands here
 
 # Read the bot token from the environment variable
-BOT_TOKEN = os.getenv('DISCORD_BOT_TOKEN')
+DISCORD_BOT_TOKEN = os.getenv('DISCORD_BOT_TOKEN')
 
-if BOT_TOKEN is None:
+if DISCORD_BOT_TOKEN is None:
     raise ValueError("DISCORD_BOT_TOKEN environment variable is not set.")
 
-bot.run(BOT_TOKEN)
+bot.run(DISCORD_BOT_TOKEN)
