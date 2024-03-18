@@ -7,23 +7,29 @@ class Welcome(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        channel_id = 1188687484654190696  # Replace with the actual channel ID where you want to send the welcome message
+        channel_id = 1179244527987466250  # Replace with the actual channel ID where you want to send the welcome message
 
-        channel_to_read = "#enlist-now"  # Replace with the actual channel name you want to mention
+        welcome_channel = self.bot.get_channel(channel_id)
 
-        channel = self.bot.get_channel(channel_id)
-
-        if channel:
+        if welcome_channel:
             # Create an embed for the welcome message
-            embed = discord.Embed(color=discord.Color(0x00FF00))  # Green color for transmission
+            embed = discord.Embed(color=discord.Color.purple())  # Using purple for a vibrant, creative feel
 
-            # Set the user's profile picture as the thumbnail
-            embed.set_thumbnail(url=member.avatar_url)
+            # Embed author set to Dragon Studios Entertainment
+            embed.set_author(name="Dragon Studios Entertainment", icon_url="https://example.com/dragon_studios_logo.png")  # Replace the URL with your studio's logo
 
-            embed.set_author(name="Office of Naval Intelligence", icon_url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLg5IvbPpE5enQ-696wFW74R3pUfZw-Mp-yUyPk6vaGw&s")
-            embed.description = f"Transmission incoming...\n\n**Welcome, {member.mention}!**\n\nThank you for joining our server. Make sure you fill out an Application, to enlist with UNSC Texas. To do so, go to the {channel_to_read} channel and read the instructions on how to apply.\n\n We look forward to seeing you on the field."
+            # Simplified welcome message without mentioning an avatar
+            embed.description = (f"🐉 Welcome to Dragon Studios Entertainment, {member.mention}! 🌟\n\n"
+                                 "We're thrilled to have you join our community of gamers, creators, and enthusiasts. "
+                                 "Dive into our channels to chat, share, and explore everything we have to offer. "
+                                 "Don't forget to check out our rules and announcements to get started on your adventure with us!\n\n"
+                                 "Let the magic begin!")
 
-            await channel.send(embed=embed)
+            # Optional: Add a footer and timestamp for a personal touch
+            embed.set_footer(text="Welcome Committee • Dragon Studios Entertainment")
+            embed.timestamp = discord.utils.utcnow()
+
+            await welcome_channel.send(embed=embed)
 
 def setup(bot):
     bot.add_cog(Welcome(bot))
