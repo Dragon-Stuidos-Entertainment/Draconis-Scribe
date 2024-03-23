@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 import asyncio
 
-YOUR_ENLISTMENT_ID = 1162892793560178689
+YOUR_ENLISTMENT_ID = 1221150081454178476
 
 class Enlistment(commands.Cog):
     def __init__(self, bot):
@@ -11,8 +11,8 @@ class Enlistment(commands.Cog):
         # Dictionary to store enlistment applications
         self.applications = {}
 
-    @commands.command(name="enlist")
-    async def enlist(self, ctx):
+    @commands.command(name="Apply")
+    async def apply(self, ctx):
         # Check if the user has an existing application
         if ctx.author.id in self.applications:
             await ctx.send("You already have an existing application in progress.")
@@ -25,16 +25,16 @@ class Enlistment(commands.Cog):
         enlistment_questions = [
             "What is your full name?",
             "What is your age?",
-            "Gamertag?",
-            "What interests you about joining?",
+            "Gender?",
+            "What interests you about joining our team?",
             "Do you have any previous experience?",
             "What skills can you bring?",
             "How did you hear about US?",
             "What time zone are you in?",
-            "Previous Clans?",
+            "Previous Development Teams",
             "What are your goals?",
-            "Motivation in being a part of a clan?",
-            "How active can you be?"
+            "Motivation in being a part of a Team?",
+            "What do you do when faced with a difficult challenge?"
         ]
 
         # Send questions to the user in DMs
