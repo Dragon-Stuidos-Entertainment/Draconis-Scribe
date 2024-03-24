@@ -44,4 +44,4 @@ class RandomTalk(commands.Cog):
             await ctx.send("Invalid index.")
 
 def setup(bot):
-    bot.add_cog(RandomTalk())
+    bot.add_cog(RandomTalk(bot))
