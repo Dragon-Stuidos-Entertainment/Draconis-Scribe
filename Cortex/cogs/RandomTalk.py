@@ -17,7 +17,7 @@ class RandomTalk(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        self.channel = self.bot.get_channel(channel_id)  # Get the channel where you want the bot to talk
+        self.channel = self.bot.get_channel(1220974489236668508)  # Get the channel where you want the bot to talk
         self.bot.loop.create_task(self.send_periodic_message())  # Start the task for sending periodic messages
 
     async def send_periodic_message(self):
