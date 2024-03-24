@@ -6,7 +6,7 @@ from discord.ext import commands
 class RandomTalk(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.channel = None  # Initialize the channel variable
+        self.channel = None # Initialize the channel variable
         self.messages = [
             "Hello, everyone! This is your friendly AI ship speaking.",
             "Just checking in to let you know everything is going well.",
