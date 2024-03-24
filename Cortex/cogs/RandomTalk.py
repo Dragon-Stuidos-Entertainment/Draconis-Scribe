@@ -26,7 +26,7 @@ class RandomTalk(commands.Cog):
             if self.channel:
                 message = random.choice(self.messages)  # Select a random message from the list
                 await self.channel.send(message)
-            await asyncio.sleep(10800)  # Sleep for 3 hours (3 hours * 60 minutes * 60 seconds = 10800 seconds)
+            await asyncio.sleep(20)  # Sleep for 3 hours (3 hours * 60 minutes * 60 seconds = 10800 seconds)
 
     @commands.command()
     async def add_message(self, ctx, *, message):
