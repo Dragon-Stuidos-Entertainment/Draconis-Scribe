@@ -42,3 +42,6 @@ class RandomTalk(commands.Cog):
             await ctx.send("Message removed!")
         except IndexError:
             await ctx.send("Invalid index.")
+
+def setup(bot):
+    bot.add_cog(RandomTalk())
