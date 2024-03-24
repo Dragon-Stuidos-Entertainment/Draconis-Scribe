@@ -7,7 +7,7 @@ class Welcome(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        channel_id = 1179244527987466250  # Replace with the actual channel ID where you want to send the welcome message
+        channel_id = 1220912889376804977  # Replace with the actual channel ID where you want to send the welcome message
 
         welcome_channel = self.bot.get_channel(channel_id)
 
