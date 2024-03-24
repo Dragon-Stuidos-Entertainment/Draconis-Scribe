@@ -17,7 +17,7 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 # Load all extensions (cogs) from the "cogs" directory
 def load_extensions():
     loaded_cogs = []  # Create an empty list to store the names of loaded cogs
-    for filename in os.listdir('./cogs'):
+    for filename in os.listdir('Cortex/cogs'):
         if filename.endswith('.py'):
             cog_name = f'cogs.{filename[:-3]}'  # Generate the cog name
             bot.load_extension(cog_name)
