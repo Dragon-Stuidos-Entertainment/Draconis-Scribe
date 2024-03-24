@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 import asyncio
 
-YOUR_ENLISTMENT_ID = 1221150081454178476
+YOUR_ENLISTMENT_ID = 1221414852036263956
 
 class Enlistment(commands.Cog):
     def __init__(self, bot):
@@ -26,15 +26,16 @@ class Enlistment(commands.Cog):
             "What is your full name?",
             "What is your age?",
             "Gender?",
-            "What interests you about joining our team?",
+            "What interests you about joining our Spartan Program?",
             "Do you have any previous experience?",
             "What skills can you bring?",
-            "How did you hear about US?",
+            "Previous Conscriptions?",
             "What time zone are you in?",
-            "Previous Development Teams",
+            "Any previous spartan II tags",
             "What are your goals?",
-            "Motivation in being a part of a Team?",
-            "What do you do when faced with a difficult challenge?"
+            "Motivation for becoming a conscript?",
+            "What do you do when faced with a difficult challenge?",
+            "What are your strengths? & weaknesses?",
         ]
 
         # Send questions to the user in DMs

@@ -19,11 +19,7 @@ class Welcome(commands.Cog):
             embed.set_author(name="Dragon Studios Entertainment", icon_url="https://example.com/dragon_studios_logo.png")  # Replace the URL with your studio's logo
 
             # Simplified welcome message without mentioning an avatar
-            embed.description = (f"🐉 Welcome to Dragon Studios Entertainment, {member.mention}! 🌟\n\n"
-                                 "We're thrilled to have you join our community of gamers, creators, and enthusiasts. "
-                                 "Dive into our channels to chat, share, and explore everything we have to offer. "
-                                 "Don't forget to check out our rules and announcements to get started on your adventure with us!\n\n"
-                                 "Let the magic begin!")
+            embed.description = (f"🐉 Welcome to Autumn's Contigency, {member.mention} We welcome you aboard our ship are you here to join us, are you a member of a allied force, or are you simply a guest? Let the staff of the Autumn know so we can provide you with proper access. 🌟\n\n" "We look forward to seeing you around.")
 
             # Optional: Add a footer and timestamp for a personal touch
             embed.set_footer(text="Welcome Committee • Dragon Studios Entertainment")

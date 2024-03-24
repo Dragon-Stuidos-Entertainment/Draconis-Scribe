@@ -21,7 +21,7 @@ class AntiSpam(commands.Cog):
             if self.cooldown[author_id] > 2:
                 await self.mute_user(message.author)
         else:
-            self.cooldown[author_id] = 3  # Cooldown period in seconds
+            self.cooldown[author_id] = 7  # Cooldown period in seconds
             await asyncio.sleep(3)
             self.cooldown[author_id] = 0
 
